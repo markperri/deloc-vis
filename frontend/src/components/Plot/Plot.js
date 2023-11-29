@@ -46,8 +46,8 @@ function Plot({ Phi, onPointClick, currentTheta }) {
 
       const layout = {
         title: 'Interactive Plot for Phi = ' + Phi,
-        xaxis: { title: 'Theta' },
-        yaxis: { title: 'E_deloc' },
+        xaxis: { title: 'Theta (deg)' },
+        yaxis: { title: 'Delocalization energy (kcal/mol)' },
       };
   
       const plotDivId = 'plot' + Phi;

@@ -12,6 +12,8 @@ Before you begin, ensure you have the following installed:
 
 python packages
 flask
+flask-cors
+pandas
 ...
 
 npm packages:
