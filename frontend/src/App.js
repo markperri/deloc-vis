@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import Plot from './components/Plot/Plot';
 import Mol2Viewer from './components/Mol';
 
@@ -6,21 +6,49 @@ function App() {
   const plots = [0, 5, 10, 15, 20, 25, 30, 40, 50, 60];
   const [openPlotIndex, setOpenPlotIndex] = useState(0);
   const [theta, setTheta] = useState(0); 
+  const [currentTheta, setCurrentTheta] = useState(0);
   const [phi, setPhi] = useState(0);
   const instructions = '* Graph displays changes in energy due to electron delocalization based on changes the amount the polymer is bent \n'+
                       '* Clicking on the different Phi values will change the graph to show the electron delocalization based on changes in Theta at the specific Phi value \n'+
                       '* Clicking on any point on the graphs will display a Dimethyl Naphthalene Dicarboximide Thiophene with the bends and torsions for the specified value of Phi and Theta \n' + 
                       '* Clicking on the polymer displayed will stop the animation until re-clicked \n'+ 
                       '* Other features for the molecule include the ability to drag, zoom-in, and zoom-out'
+  const [isSimulating, setIsSimulating] = useState(false);
+  const stopSimulation = () => {
+    setIsSimulating(false);
+  };
 
+  useEffect(() => {
+    if (isSimulating) {
+      let currentTheta = 0;
+      const interval = setInterval(() => {
+        handlePointClick(currentTheta);
+        setCurrentTheta(currentTheta);
+        currentTheta+=10;
+        if (currentTheta >= 360) {
+          clearInterval(interval);
+          setIsSimulating(false);
+        }
+      }, 1500); 
+
+      return () => clearInterval(interval);
+    }
+  }, [isSimulating]);
+
+  const startSimulation = () => {
+    setIsSimulating(true);
+  };
+  
 
   const handleClick = (index, phi) => {
     setPhi(phi);
     setOpenPlotIndex(openPlotIndex === index ? index : index);
+    setIsSimulating(false);
   };
 
   const handlePointClick = (xValue) => {
     setTheta(xValue); 
+    setCurrentTheta(xValue);
   };
 
   const getFilePath = (phi, theta) => {
@@ -38,7 +66,7 @@ function App() {
         {plots.map((phi, index) => (
           <div key={phi} style={{ padding: '17px' }}>
             <button onClick={() => handleClick(index, phi)}>Phi = {phi}</button>
-            {openPlotIndex === index && <Plot Phi={phi} onPointClick={handlePointClick} />}
+            {openPlotIndex === index && <Plot Phi={phi} onPointClick={handlePointClick} currentTheta={currentTheta}/>}
           </div>
         ))}
       </div>
@@ -57,6 +85,12 @@ function App() {
       <text style ={{position: 'fixed', top: '800px',whiteSpace: 'pre-line'}}>
         {instructions}
       </text>
+      <button onClick={startSimulation} style={{ position: 'fixed', top: '675px', left: '990px' }}>
+        Start Simulation
+      </button>
+      <button onClick={stopSimulation} style={{ position: 'fixed', top: '675px', left: '1110px' }}>
+        Stop Simulation
+      </button>
     </div>
   );
 }

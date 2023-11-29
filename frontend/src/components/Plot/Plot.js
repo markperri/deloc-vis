@@ -3,7 +3,7 @@ import Plotly from 'plotly.js';
 import './Plot.css';
 import { fetchPlotData } from '../../utils/api';
 
-function Plot({ Phi, onPointClick }) { 
+function Plot({ Phi, onPointClick, currentTheta }) { 
   const [plotData, setPlotData] = useState(null);
   const E_delocs = [];
   const Thetas = [];
@@ -29,11 +29,21 @@ function Plot({ Phi, onPointClick }) {
       const trace = {
         type: 'scatter',
         mode: 'lines+markers',
+        name: 'plot',
         x: Thetas,
         y: E_delocs,
         marker: { color: 'red', size: 10 },
       };
-  
+
+      const highlightTrace = currentTheta !== null ? {
+        type: 'scatter',
+        mode: 'markers',
+        name: 'displayed',
+        x: [currentTheta],
+        y: [E_delocs[Thetas.indexOf(currentTheta)]], 
+        marker: { color: 'blue', size: 12 }, 
+      } : null;
+
       const layout = {
         title: 'Interactive Plot for Phi = ' + Phi,
         xaxis: { title: 'Theta' },
@@ -41,7 +51,7 @@ function Plot({ Phi, onPointClick }) {
       };
   
       const plotDivId = 'plot' + Phi;
-      Plotly.newPlot(plotDivId, [trace], layout);
+      Plotly.newPlot(plotDivId, highlightTrace ? [trace, highlightTrace] : [trace], layout);
   
       
       const plotElement = document.getElementById(plotDivId);

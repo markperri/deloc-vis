@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import * as $3Dmol from '3dmol/build/3Dmol.js';
 import { fetchStructureData } from '../utils/api';
 
-const MolecularViewer = ({ filePath }) => {
+const MolecularViewer = ({ filePath}) => {
     const viewerRef = useRef();
 
     useEffect(() => {
