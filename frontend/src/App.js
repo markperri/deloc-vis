@@ -17,7 +17,7 @@ function App() {
   const stopSimulation = () => {
     setIsSimulating(false);
   };
-
+  const [isAnimating, setIsAnimating] = useState(false);
   useEffect(() => {
     if (isSimulating) {
       let currentTheta = 0;
@@ -33,10 +33,13 @@ function App() {
 
       return () => clearInterval(interval);
     }
-  }, [isSimulating]);
+  }, [isSimulating, isAnimating]);
 
   const startSimulation = () => {
     setIsSimulating(true);
+  };
+  const stopAnimate = () => {
+    setIsAnimating(prevState => !prevState); 
   };
   
 
@@ -77,7 +80,7 @@ function App() {
         Phi= {phi} and Theta= {theta}
       </h4>
       <div style={{ position: 'fixed', top: '240px', left: '900px', border: "2px solid black"}}>
-        <Mol2Viewer filePath={currentFilePath}/>
+        <Mol2Viewer filePath={currentFilePath} isAnimating={isAnimating}/>
       </div>
       <h3 style ={{position: 'fixed', top: '750px',}}>
         Features and Instructions 
@@ -90,6 +93,9 @@ function App() {
       </button>
       <button onClick={stopSimulation} style={{ position: 'fixed', top: '675px', left: '1110px' }}>
         Stop Simulation
+      </button>
+      <button onClick={stopAnimate} style={{ position: 'fixed', top: '200px', left: '1175px' }}>
+        Stop/Start Rotation
       </button>
     </div>
   );

@@ -28,5 +28,18 @@ def structures(file_path):
 
     return jsonify({"data": content})
 
+@app.route('/cubes/<path:file_path>', methods=['GET'])
+def cubes(file_path):
+    base_path = 'planar-orbitals-p3mt/'
+    full_path = os.path.join(base_path, file_path)
+    
+    if not os.path.isfile(full_path):
+        return jsonify({"error": "File not found"}), 404
+    
+    with open(full_path, 'r') as file:
+        content = file.read()
+
+    return jsonify({"data": content})
+
 if __name__ == '__main__':
     app.run(debug=True)
