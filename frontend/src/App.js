@@ -37,6 +37,7 @@ function App() {
 
   const startSimulation = () => {
     setIsSimulating(true);
+    console.log(isSimulating);
   };
   const stopAnimate = () => {
     setIsAnimating(prevState => !prevState); 
@@ -57,8 +58,13 @@ function App() {
   const getFilePath = (phi, theta) => {
     return `Dimethyl_Naphthalene_Dicarboximide_Phi_${phi}_Theta_${theta}_Thiophene.mol2`;
   };
+  const getFilePathMol = (phi, theta) => {
+    return `Methylthiophene_Phi_${phi}_Theta_${theta}_Methylthiophene.cube`;
+  };
 
   const currentFilePath = openPlotIndex !== null ? getFilePath(plots[openPlotIndex], theta) : '';
+  const currentFilePathMol = openPlotIndex !== null ? getFilePathMol(plots[openPlotIndex], theta) : '';
+
 
   return (
     <div className="App" style={{ marginTop: '50px', marginLeft: '30px' }}>
@@ -80,7 +86,7 @@ function App() {
         Phi= {phi} and Theta= {theta}
       </h4>
       <div style={{ position: 'fixed', top: '240px', left: '900px', border: "2px solid black"}}>
-        <Mol2Viewer filePath={currentFilePath} isAnimating={isAnimating}/>
+        <Mol2Viewer filePath={currentFilePath} orbitalPath = {currentFilePathMol} isAnimating={isAnimating}/>
       </div>
       <h3 style ={{position: 'fixed', top: '750px',}}>
         Features and Instructions 

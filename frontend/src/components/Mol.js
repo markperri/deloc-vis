@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import * as $3Dmol from '3dmol/build/3Dmol.js';
-import { fetchStructureData } from '../utils/api';
+import { fetchStructureData, fetchCubeData } from '../utils/api';
 
-const MolecularViewer = ({ filePath, isAnimating}) => {
+const MolecularViewer = ({ filePath, orbitalPath, isAnimating }) => {
     const viewerRef = useRef();
     const viewer = useRef(null);
     const animationFrameId = useRef();
@@ -16,9 +16,7 @@ const MolecularViewer = ({ filePath, isAnimating}) => {
 
         fetchStructureData(filePath)
             .then((data) => {
-                console.log("Molecule data:", data); 
-                viewer.current= new $3Dmol.createViewer(viewerRef.current);
-
+                viewer.current = new $3Dmol.createViewer(viewerRef.current);
                 viewer.current.addModel(data.data, "mol2");
                 viewer.current.setStyle({}, { stick: {radius: 0.1}, sphere: {radius: 0.5} });
                 viewer.current.zoomTo();
@@ -27,7 +25,28 @@ const MolecularViewer = ({ filePath, isAnimating}) => {
             .catch((error) => {
                 console.error("Error loading .mol2 file:", error);
             });
-    }, [filePath]);
+
+        if (orbitalPath) {
+            fetchCubeData(orbitalPath)
+                .then((orbitalData) =>{
+                    console.log(orbitalData);
+                    var voldata = new $3Dmol.VolumeData(orbitalData, "cube");
+                    if (viewer && viewer.current.addIsosurface) {
+                        viewer.current.addIsosurface(voldata, {isoval: 0.01, color: "blue", alpha: 0.95, smoothness: 10});
+                        viewer.current.addIsosurface(voldata, {isoval: -0.01, color: "red", alpha: 0.95, smoothness: 10});
+                        viewer.current.setStyle({}, {stick:{}});
+                        viewer.current.zoomTo();
+                        viewer.current.render();
+                    } else {
+                        console.error("viewer is not initialized correctly or addIsosurface method is missing");
+                    }
+                
+                })
+                .catch((error) => {
+                    console.error("Error loading cube file:", error);
+                });
+        }
+    }, [filePath, orbitalPath]);
 
     useEffect(() => {
         function animate() {
@@ -39,7 +58,7 @@ const MolecularViewer = ({ filePath, isAnimating}) => {
         }
         if (isAnimating) {
             animate();
-        }else if(animationFrameId.current){
+        } else if (animationFrameId.current) {
             cancelAnimationFrame(animationFrameId.current);
         }
         return () => {

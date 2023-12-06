@@ -10,17 +10,6 @@ Before you begin, ensure you have the following installed:
 * [Node.js](https://nodejs.org/) - for running the frontend.
 * Python - for running the backend.
 
-python packages
-flask
-flask-cors
-pandas
-...
-
-npm packages:
-craco
-...
-
-
 ### Installation and Running the Application
 
 1. **Clone the Repository**

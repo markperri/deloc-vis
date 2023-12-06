@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, Response
 from flask_cors import CORS
 import pandas as pd
 import os
@@ -30,16 +30,16 @@ def structures(file_path):
 
 @app.route('/cubes/<path:file_path>', methods=['GET'])
 def cubes(file_path):
-    base_path = 'planar-orbitals-p3mt/'
+    base_path = 'p3ht/planar-orbitals-p3mt/'
     full_path = os.path.join(base_path, file_path)
     
     if not os.path.isfile(full_path):
-        return jsonify({"error": "File not found"}), 404
+        return "File not found", 404
     
     with open(full_path, 'r') as file:
         content = file.read()
 
-    return jsonify({"data": content})
+    return Response(content)
 
 if __name__ == '__main__':
     app.run(debug=True)
