@@ -7,9 +7,12 @@ app = Flask(__name__)
 
 CORS(app, resources={r"*": {"origins": "*"}})
 
-@app.route('/plot_data', methods=['GET'])
-def plot_data():
-    relative_path = 'deloc-vis-main/data/pndit/sorted_deloc_energies.pndit.csv'
+@app.route('/plot_data/<path:file_path>', methods=['GET'])
+def plot_data(file_path):
+    base_path = 'graph-data/'
+    relative_path = os.path.join(base_path, file_path)
+    if not os.path.isfile(relative_path):
+        return jsonify({"error": "File not found"}), 404
     df = pd.read_csv(relative_path)
     df = df[['Phi', 'Theta', 'E_deloc']]
     data = df.to_dict(orient='records')
@@ -17,7 +20,7 @@ def plot_data():
 
 @app.route('/structures/<path:file_path>', methods=['GET'])
 def structures(file_path):
-    base_path = 'deloc-vis-main/data/pndit/structures/'
+    base_path = 'rotation-mol2s/'
     full_path = os.path.join(base_path, file_path)
     
     if not os.path.isfile(full_path):
@@ -30,7 +33,7 @@ def structures(file_path):
 
 @app.route('/cubes/<path:file_path>', methods=['GET'])
 def cubes(file_path):
-    base_path = 'p3ht/planar-orbitals-p3mt/'
+    base_path = 'rotation-cubes/'
     full_path = os.path.join(base_path, file_path)
     
     if not os.path.isfile(full_path):

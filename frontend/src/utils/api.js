@@ -1,6 +1,6 @@
-export const fetchPlotData = async () => {
+export const fetchPlotData = async (filePath) => {
     try {
-        const response = await fetch('http://127.0.0.1:5000/plot_data', { method: 'GET' });
+        const response = await fetch(`http://127.0.0.1:5000/plot_data/${encodeURIComponent(filePath)}`, { method: 'GET' });
         if (!response.ok) {
           throw new Error('Network response was not ok: ' + response.statusText);
         }
