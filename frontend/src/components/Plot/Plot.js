@@ -3,7 +3,7 @@ import Plotly from 'plotly.js';
 import './Plot.css';
 import { fetchPlotData } from '../../utils/api';
 
-function Plot({allPhis, Phi, onPointClick, currentTheta, filePath, overlayPlots, overlayMode}) {
+function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, overlayPlots, overlayMode}) {
   const [plotData, setPlotData] = useState();
   const [highlightedPoint, setHighlightedPoint] = useState(null);
   useEffect(() => {
@@ -46,7 +46,8 @@ function Plot({allPhis, Phi, onPointClick, currentTheta, filePath, overlayPlots,
       if (overlayMode) {
         overlayPlots.forEach(phiValue => {
           processPhi(phiValue);
-        });      } else if (Phi != null) {
+        });      
+      } else if (Phi != null) {
         processPhi(Phi);
       } else if(Phi === null){
         allPhis.forEach(phiValue => {
@@ -80,12 +81,27 @@ function Plot({allPhis, Phi, onPointClick, currentTheta, filePath, overlayPlots,
         };
         traces.push(highlightTrace);
       }
+      let rangeValues;
 
+      if(molecule === 'P3HT'){
+        rangeValues = [1.098, 1.107];
+      }
+      if(molecule === 'PTB7FIN'){
+        rangeValues = [1.04, 1.065];
+      }
+      if(molecule === 'PTB7FOUT'){
+        rangeValues = [1.04, 1.065];
+      }
+      if(molecule ==='PNDIT'){
+        rangeValues = [1.04, 1.065];
+      }
       const layout = {
         title: 'Interactive Plot' + (allPhis ? ' for all Phi Values' : ' for Phi = ' + Phi),
         xaxis: { title: 'Theta (deg)' },
-        //range: [1.098, 1.107] -- need to make specific range per molecule
-        yaxis: { title: 'Delocalization energy (kcal/mol)',  }
+        yaxis: {
+          title: 'Delocalization energy (kcal/mol)',
+          range: rangeValues 
+        }
       };
 
       const plotDivId = 'plot' + (allPhis ? 'All' : Phi);

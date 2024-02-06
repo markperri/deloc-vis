@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import * as $3Dmol from '3dmol/build/3Dmol.js';
 import { fetchStructureData, fetchCubeData } from '../utils/api';
 
-const MolecularViewer = ({ Phi, Theta, filePath, orbitalPath, isAnimating, showOrbitals }) => {
+const MolecularViewer = ({Phi, Theta, filePath, orbitalPath, isAnimating, showOrbitals }) => {
     const viewerRef = useRef();
     const viewer = useRef(null);
     const animationFrameId = useRef();

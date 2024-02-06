@@ -144,20 +144,20 @@ function TotalVisual({molecule}) {
       </button>
       <div style={{ marginTop: '150px' }}>
         {showAllGraphs ? (
-          <Plot allPhis= {plots} Phi={null} onPointClick={handlePointClick} currentTheta={currentTheta} filePath ={currentFilePathPlot}/>
+          <Plot molecule = {molecule} allPhis= {plots} Phi={null} onPointClick={handlePointClick} currentTheta={currentTheta} filePath ={currentFilePathPlot}/>
         ) : (
         <div style={{ position: 'fixed', top: '150px', left: '38px'}}>
           {plots.map((phi, index) => (
             <div key={phi} style={{ padding: '15px'}}>
               <button onClick={() => handleClick(index, phi)}>Phi = {phi}</button>
-              {openPlotIndex === index && <Plot Phi={phi} onPointClick={handlePointClick} overlayPlots={overlayPlots} overlayMode= {overlayMode} currentTheta={currentTheta} filePath ={currentFilePathPlot}/>}
+              {openPlotIndex === index && <Plot molecule = {molecule} Phi={phi} onPointClick={handlePointClick} overlayPlots={overlayPlots} overlayMode= {overlayMode} currentTheta={currentTheta} filePath ={currentFilePathPlot}/>}
             </div>
           ))}
         </div>
         )}
       </div>
       <h3 style={{ position: 'fixed', top: '140px', left: '900px'}}>
-        Molecular Viewer
+        {molecule} Molecular Viewer
       </h3>
       <h4 style={{ position: 'fixed', top: '180px', left: '900px'}}>
         Phi= {phi} and Theta= {theta}
