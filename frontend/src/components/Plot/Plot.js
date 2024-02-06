@@ -3,10 +3,9 @@ import Plotly from 'plotly.js';
 import './Plot.css';
 import { fetchPlotData } from '../../utils/api';
 
-function Plot({allPhis, Phi, onPointClick, currentTheta, filePath}) {
+function Plot({allPhis, Phi, onPointClick, currentTheta, filePath, overlayPlots, overlayMode}) {
   const [plotData, setPlotData] = useState();
   const [highlightedPoint, setHighlightedPoint] = useState(null);
-  const plots = [0, 5, 10, 15, 20, 25, 30, 40, 50, 60];
   useEffect(() => {
     if (filePath) {
       fetchPlotData(filePath)
@@ -44,13 +43,16 @@ function Plot({allPhis, Phi, onPointClick, currentTheta, filePath}) {
         };
         traces.push(trace);
       };
-      if (Phi != null) {
+      if (overlayMode) {
+        overlayPlots.forEach(phiValue => {
+          processPhi(phiValue);
+        });      } else if (Phi != null) {
         processPhi(Phi);
       } else if(Phi === null){
-        plots.forEach(phiValue => {
+        allPhis.forEach(phiValue => {
           processPhi(phiValue);
         });
-      }
+      } 
 
       if (currentTheta !== null) {
         const currentThetaIndex = plotData.findIndex(item => item.Theta === currentTheta && item.Phi === Phi);

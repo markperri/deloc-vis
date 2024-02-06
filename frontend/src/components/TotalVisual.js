@@ -8,6 +8,9 @@ function TotalVisual({molecule}) {
   const [theta, setTheta] = useState(0); 
   const [currentTheta, setCurrentTheta] = useState(0);
   const [phi, setPhi] = useState(0);
+  const [plots2, setPlots2] = useState([]);
+  const [overlayMode, setOverlayMode] = useState(false);
+  const [overlayPlots, setOverlayPlots] = useState([]);
   const instructions = '* Graph displays changes in energy due to electron delocalization based on changes the amount the polymer is bent \n'+
                       '* Clicking on the different Phi values will change the graph to show the electron delocalization based on changes in Theta at the specific Phi value \n'+
                       '* Clicking on any point on the graphs will display a Methylthiophene with the bends and torsions for the specified value of Phi and Theta \n' + 
@@ -56,9 +59,19 @@ function TotalVisual({molecule}) {
   
 
   const handleClick = (index, phi) => {
-    setPhi(phi);
-    setOpenPlotIndex(index);
-    setIsSimulating(false);
+    if (overlayMode) {
+      setOverlayPlots(prevOverlayPlots => {
+        if (!prevOverlayPlots.includes(phi)) {
+          return [...prevOverlayPlots, phi];
+        } else {
+          return prevOverlayPlots; 
+        }
+      });
+    } else {
+      setPhi(phi);
+      setOpenPlotIndex(index);
+      setIsSimulating(false);
+    }
   };
 
   const handlePointClick = (xValue) => {
@@ -66,6 +79,12 @@ function TotalVisual({molecule}) {
     setCurrentTheta(xValue);
   };
 
+  const handleOverlayClick = () => {
+    setOverlayMode(!overlayMode); 
+    if (!overlayMode) {
+      setOverlayPlots([]); 
+    }
+  };
 
   const getFilePath = (phi, theta) => {
     if(molecule === 'P3HT'){
@@ -117,19 +136,21 @@ function TotalVisual({molecule}) {
 
   return (
     <div className="App" style={{ marginTop: '50px', marginLeft: '30px' }}>
-      
-      <button onClick={toggleAllGraphs} style={{ position: 'fixed', top: '680px', left: '53px' }}>
+    <button onClick={handleOverlayClick} style={{ position: 'fixed', top: '130px', left: '430px' }}>
+      {overlayMode ? "Stop Overlaying Plots" : "Overlay Plots"}
+    </button>      
+    <button onClick={toggleAllGraphs} style={{ position: 'fixed', top: '680px', left: '53px' }}>
         {showAllGraphs ? 'Close All' : 'Open All'}
       </button>
       <div style={{ marginTop: '150px' }}>
         {showAllGraphs ? (
-          <Plot allPhis= {true} Phi={null} onPointClick={handlePointClick} currentTheta={currentTheta} filePath ={currentFilePathPlot}/>
+          <Plot allPhis= {plots} Phi={null} onPointClick={handlePointClick} currentTheta={currentTheta} filePath ={currentFilePathPlot}/>
         ) : (
         <div style={{ position: 'fixed', top: '150px', left: '38px'}}>
           {plots.map((phi, index) => (
             <div key={phi} style={{ padding: '15px'}}>
               <button onClick={() => handleClick(index, phi)}>Phi = {phi}</button>
-              {openPlotIndex === index && <Plot Phi={phi} onPointClick={handlePointClick} currentTheta={currentTheta} filePath ={currentFilePathPlot}/>}
+              {openPlotIndex === index && <Plot Phi={phi} onPointClick={handlePointClick} overlayPlots={overlayPlots} overlayMode= {overlayMode} currentTheta={currentTheta} filePath ={currentFilePathPlot}/>}
             </div>
           ))}
         </div>
