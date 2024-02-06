@@ -4,25 +4,29 @@ import './Plot.css';
 import { fetchPlotData } from '../../utils/api';
 
 function Plot({allPhis, Phi, onPointClick, currentTheta, filePath}) {
-  const [plotData, setPlotData] = useState(null);
+  const [plotData, setPlotData] = useState();
   const [highlightedPoint, setHighlightedPoint] = useState(null);
-
+  const plots = [0, 5, 10, 15, 20, 25, 30, 40, 50, 60];
   useEffect(() => {
-    fetchPlotData(filePath)
-      .then(data => {
-        console.log('Fetched plot data:', data);
-        setPlotData(data);
-      })
-      .catch(error => console.error('Error fetching plot data:', error));
+    if (filePath) {
+      fetchPlotData(filePath)
+        .then(data => {
+          console.log('Fetched plot data:', data);
+          setPlotData(data);
+        })
+        .catch(error => console.error('Error fetching plot data:', error));
+    }
   }, [filePath]);
 
   useEffect(() => {
-    if (plotData) {
+    console.log("plot data: " + plotData);
+    if (plotData != null) {
       const traces = [];
       const processPhi = (phiValue) => {
         const E_delocs = [];
         const Thetas = [];
 
+        
         plotData.forEach(item => {
           if (item.Phi === phiValue) {
             E_delocs.push(item.E_deloc);
@@ -40,11 +44,12 @@ function Plot({allPhis, Phi, onPointClick, currentTheta, filePath}) {
         };
         traces.push(trace);
       };
-
-      if (allPhis) {
-        allPhis.forEach(phiValue => processPhi(phiValue));
-      } else {
+      if (Phi != null) {
         processPhi(Phi);
+      } else if(Phi === null){
+        plots.forEach(phiValue => {
+          processPhi(phiValue);
+        });
       }
 
       if (currentTheta !== null) {
@@ -75,7 +80,7 @@ function Plot({allPhis, Phi, onPointClick, currentTheta, filePath}) {
       }
 
       const layout = {
-        title: 'Interactive Plot' + (allPhis ? '' : ' for Phi = ' + Phi),
+        title: 'Interactive Plot' + (allPhis ? ' for all Phi Values' : ' for Phi = ' + Phi),
         xaxis: { title: 'Theta (deg)' },
         //range: [1.098, 1.107] -- need to make specific range per molecule
         yaxis: { title: 'Delocalization energy (kcal/mol)',  }
@@ -93,7 +98,7 @@ function Plot({allPhis, Phi, onPointClick, currentTheta, filePath}) {
         });
       }
     }
-  }, [plotData, Phi, allPhis, onPointClick, highlightedPoint, currentTheta]);
+  }, [plotData, Phi, allPhis, onPointClick, highlightedPoint, currentTheta, filePath]);
 
   return <div id={"plot" + (allPhis ? 'All' : Phi)} className="plot-container"></div>;
 }

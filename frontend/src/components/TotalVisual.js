@@ -24,6 +24,7 @@ function TotalVisual({molecule}) {
   const [showAllGraphs, setShowAllGraphs] = useState(false);
   const toggleAllGraphs = () => {
     setShowAllGraphs(!showAllGraphs);
+    setPhi(null);
   };
 
   useEffect(() => {
@@ -56,7 +57,7 @@ function TotalVisual({molecule}) {
 
   const handleClick = (index, phi) => {
     setPhi(phi);
-    setOpenPlotIndex(openPlotIndex === index ? index : index);
+    setOpenPlotIndex(index);
     setIsSimulating(false);
   };
 
@@ -64,6 +65,7 @@ function TotalVisual({molecule}) {
     setTheta(xValue); 
     setCurrentTheta(xValue);
   };
+
 
   const getFilePath = (phi, theta) => {
     if(molecule === 'P3HT'){
@@ -121,7 +123,7 @@ function TotalVisual({molecule}) {
       </button>
       <div style={{ marginTop: '150px' }}>
         {showAllGraphs ? (
-          <Plot allPhis={plots} onPointClick={handlePointClick} currentTheta={currentTheta}/>
+          <Plot allPhis= {true} Phi={null} onPointClick={handlePointClick} currentTheta={currentTheta} filePath ={currentFilePathPlot}/>
         ) : (
         <div style={{ position: 'fixed', top: '150px', left: '38px'}}>
           {plots.map((phi, index) => (
