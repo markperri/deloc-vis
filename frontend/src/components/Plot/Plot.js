@@ -84,16 +84,16 @@ function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, ove
       let rangeValues;
 
       if(molecule === 'P3HT'){
-        rangeValues = [1.098, 1.107];
+        //rangeValues = [1.098, 1.107];
       }
       if(molecule === 'PTB7FIN'){
-        rangeValues = [1.04, 1.065];
+        //rangeValues = [1.04, 1.065];
       }
       if(molecule === 'PTB7FOUT'){
-        rangeValues = [1.04, 1.065];
+        //rangeValues = [1.04, 1.065];
       }
       if(molecule ==='PNDIT'){
-        rangeValues = [1.04, 1.065];
+        //rangeValues = [1.04, 1.065];
       }
       const layout = {
         title: 'Interactive Plot' + (allPhis ? ' for all Phi Values' : ' for Phi = ' + Phi),

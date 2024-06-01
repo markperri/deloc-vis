@@ -3,7 +3,7 @@ import Plot from './Plot/Plot';
 import Mol2Viewer from './Mol';
 
 function TotalVisual({molecule}) {
-  const plots = [0, 5, 10, 15, 20, 25, 30, 40, 50, 60];
+  const plots = [0, 5, 10, 15, 20, 25, 30];
   const [openPlotIndex, setOpenPlotIndex] = useState(0);
   const [theta, setTheta] = useState(0); 
   const [currentTheta, setCurrentTheta] = useState(0);
@@ -119,13 +119,13 @@ function TotalVisual({molecule}) {
         return `p3mt.csv`;
     }
     if(molecule === 'PTB7FIN'){
-        return `sorted_deloc_energies_pndit.csv`;
+        return `ptb7in.csv`;
     }
     if(molecule === 'PTB7FOUT'){
-        return `sorted_deloc_energies_pndit.csv`;
+        return `ptb7out.csv`;
     }
     if(molecule ==='PNDIT'){
-        return `sorted_deloc_energies_pndit.csv`
+        return `pndit.csv`
     }
   };
 
