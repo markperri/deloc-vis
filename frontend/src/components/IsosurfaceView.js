@@ -24,39 +24,49 @@ const IsosurfaceView = ({ folderPath }) => {
 
                 if (files["Molekeul.stl"]) {
                     stlLoader.load(files["Molekeul.stl"], (geometry) => {
-                        const stlMesh = new THREE.Mesh(
+                        const mesh = new THREE.Mesh(
                             geometry,
                             new THREE.MeshStandardMaterial({ color: 0x00ff00 })
                         );
-                        stlMesh.rotation.x = -Math.PI;
-                        stlMesh.scale.set(0.5, 0.5, 0.5);
-                        setStlMesh(stlMesh);
+                        mesh.rotation.x = -Math.PI;
+                        mesh.scale.set(0.5, 0.5, 0.5);
+                        setStlMesh(mesh);
                         console.log("Loaded Molekeul.stl");
                     });
                 }
 
                 if (files["Isoober.stl"]) {
                     stlLoader.load(files["Isoober.stl"], (geometry) => {
-                        const meshMesh = new THREE.Mesh(
+                        const mesh = new THREE.Mesh(
                             geometry,
                             new THREE.MeshStandardMaterial({ color: 0xffffff })
                         );
-                        meshMesh.rotation.x = -Math.PI;
-                        meshMesh.scale.set(0.5, 0.5, 0.5);
-                        setMeshMesh(meshMesh);
+                        mesh.rotation.x = -Math.PI;
+                        mesh.scale.set(0.5, 0.5, 0.5);
+                        setMeshMesh(mesh);
                         console.log("Loaded Isoober.stl");
                     });
                 }
 
                 if (files["color.glb"]) {
                     gltfLoader.load(files["color.glb"], (gltf) => {
+                        // Dispose old scene before setting new one
+                        if (glbScene) {
+                            glbScene.traverse((child) => {
+                                if (child.isMesh) {
+                                    child.geometry.dispose();
+                                    if (child.material.map) child.material.map.dispose();
+                                    child.material.dispose();
+                                }
+                            });
+                        }
+
                         gltf.scene.rotation.x = -Math.PI;
                         gltf.scene.scale.set(0.5, 0.5, 0.5);
 
                         console.log("GLTF Scene:", gltf.scene);
-                        console.log("Children:", gltf.scene.children);
 
-                        // Find the main object inside the GLB file
+                        // Find the main molecular object
                         const mainObject = gltf.scene.children.find(child => 
                             child.name.includes("Methylthiophene")
                         );
@@ -68,6 +78,7 @@ const IsosurfaceView = ({ folderPath }) => {
 
                         console.log("Main Object:", mainObject);
 
+                        // Apply materials to atoms based on group names
                         mainObject.children.forEach((group) => {
                             if (group.isObject3D) {
                                 group.children.forEach((mesh) => {
@@ -103,16 +114,21 @@ const IsosurfaceView = ({ folderPath }) => {
         }
     }, [stlMesh, glbScene]);
 
-    const getAtomMaterial = (groupName) => {
-        const materialMap = {
-            grp1: new THREE.MeshStandardMaterial({ color: 0x202020, metalness: 0.1, roughness: 0.5 }), // Carbon (black/gray)
-            grp3621: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.5 }), // Sulfur (yellow)
-            grp7241: new THREE.MeshStandardMaterial({ color: 0xFF0000, metalness: 0.1, roughness: 0.5 }), // Oxygen (red)
-            grp7965: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.5 }), // Hydrogen (white)
-            default: new THREE.MeshStandardMaterial({ color: 0x00FF00, metalness: 0.1, roughness: 0.5 }) // Default green
-        };
+    // Material Cache to prevent redundant material creation
+    const materialCache = {};
 
-        return materialMap[groupName] || materialMap.default;
+    const getAtomMaterial = (groupName) => {
+        if (!materialCache[groupName]) {
+            const materialMap = {
+                grp1: new THREE.MeshStandardMaterial({ color: 0x202020, metalness: 0.1, roughness: 0.5 }), // Carbon (black/gray)
+                grp3621: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.5 }), // Sulfur (yellow)
+                grp7241: new THREE.MeshStandardMaterial({ color: 0xFF0000, metalness: 0.1, roughness: 0.5 }), // Oxygen (red)
+                grp7965: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.5 }), // Hydrogen (white)
+                default: new THREE.MeshStandardMaterial({ color: 0x00FF00, metalness: 0.1, roughness: 0.5 }) // Default green
+            };
+            materialCache[groupName] = materialMap[groupName] || materialMap.default;
+        }
+        return materialCache[groupName];
     };
 
     return (
