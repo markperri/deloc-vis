@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import Plot from './Plot/Plot';
 import Mol2Viewer from './Mol';
+import IsosurfaceView  from './IsosurfaceView';
 
 function TotalVisual({molecule}) {
   const plots = [0, 5, 10, 15, 20, 25, 30];
@@ -129,10 +130,22 @@ function TotalVisual({molecule}) {
     }
   };
 
+  const getFolderPath = (phi, theta) => {
+    if(molecule === 'P3HT'){
+        return `pdb-files/Methylthiophene_Phi_${phi}_Theta_${theta}_Methylthiophene`;
+    }
+    if(molecule === 'PTB7FIN'){
+    }
+    if(molecule === 'PTB7FOUT'){
+    }
+    if(molecule ==='PNDIT'){
+    }
+  };
+
   const currentFilePath = openPlotIndex !== null ? getFilePath(plots[openPlotIndex], theta) : '';
   const currentFilePathMol = openPlotIndex !== null ? getFilePathMol(plots[openPlotIndex], theta) : '';
   const currentFilePathPlot = openPlotIndex !== null ? getFilePathPlot(): '';
-
+  const currentFolderPath = openPlotIndex !== null ? getFolderPath(plots[openPlotIndex], theta) : '';
 
   return (
     <div className="App" style={{ marginTop: '50px', marginLeft: '30px' }}>
@@ -164,6 +177,9 @@ function TotalVisual({molecule}) {
       </h4>
       <div style={{ position: 'fixed', top: '240px', left: '900px', border: "2px solid black"}}>
         <Mol2Viewer Phi={phi} Theta ={theta} filePath={currentFilePath} orbitalPath = {currentFilePathMol} isAnimating={isAnimating} showOrbitals={showOrbitals}/>
+      </div>
+      <div style={{ position: 'fixed', top: '160px', left: '1350px', width: '600px', height: '900px',border: "2px solid black"}}>
+        <IsosurfaceView folderPath={currentFolderPath}/>
       </div>
       <h3 style ={{position: 'fixed', top: '750px',}}>
         Features and Instructions 

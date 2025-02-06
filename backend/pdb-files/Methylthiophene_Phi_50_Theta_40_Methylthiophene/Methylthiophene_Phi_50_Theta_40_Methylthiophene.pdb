@@ -1,0 +1,49 @@
+HEADER    PROTEIN
+COMPND    Converted from Q-Chem input: Methylthiophene_Phi_50_Theta_40_Methylthiophene.qcin 
+AUTHOR    AICD-extract
+ATOM      1  C   UNK     1       3.280  -0.650   0.393  1.00  0.00 
+ATOM      2  C   UNK     1       2.817   0.609   0.786  1.00  0.00 
+ATOM      3  C   UNK     1       1.481   0.905   0.403  1.00  0.00 
+ATOM      4  H   UNK     1       3.444   1.315   1.351  1.00  0.00 
+ATOM      5  C   UNK     1       0.887  -0.152  -0.309  1.00  0.00 
+ATOM      6  S   UNK     1       2.009  -1.495  -0.485  1.00  0.00 
+ATOM      7  C   UNK     1       0.800   2.205   0.730  1.00  0.00 
+ATOM      8  H   UNK     1       1.474   2.876   1.297  1.00  0.00 
+ATOM      9  H   UNK     1      -0.111   2.049   1.346  1.00  0.00 
+ATOM     10  H   UNK     1       0.483   2.747  -0.186  1.00  0.00 
+ATOM     11  H   UNK     1       4.255  -1.122   0.556  1.00  0.00 
+ATOM     12  C   UNK     1      -0.446  -0.251  -0.871  1.00  0.00 
+ATOM     13  C   UNK     1      -1.258  -1.163  -0.192  1.00  0.00 
+ATOM     14  C   UNK     1      -2.483  -0.636   0.301  1.00  0.00 
+ATOM     15  H   UNK     1      -0.967  -2.215  -0.051  1.00  0.00 
+ATOM     16  C   UNK     1      -2.630   0.729  -0.002  1.00  0.00 
+ATOM     17  S   UNK     1      -1.234   1.319  -0.898  1.00  0.00 
+ATOM     18  C   UNK     1      -3.488  -1.460   1.057  1.00  0.00 
+ATOM     19  H   UNK     1      -3.143  -2.506   1.168  1.00  0.00 
+ATOM     20  H   UNK     1      -4.471  -1.487   0.541  1.00  0.00 
+ATOM     21  H   UNK     1      -3.667  -1.059   2.077  1.00  0.00 
+ATOM     22  H   UNK     1      -3.456   1.408   0.241  1.00  0.00 
+CONECT    1    2    6   11
+CONECT    2    1    3    4
+CONECT    3    2    5    7
+CONECT    4    2
+CONECT    5    3    6   12
+CONECT    6    1    5
+CONECT    7    3    8    9   10
+CONECT    8    7
+CONECT    9    7
+CONECT   10    7
+CONECT   11    1
+CONECT   12    5   13   17
+CONECT   13   12   14   15
+CONECT   14   13   16   18
+CONECT   15   13
+CONECT   16   14   17   22
+CONECT   17   12   16
+CONECT   18   14   19   20   21
+CONECT   19   18
+CONECT   20   18
+CONECT   21   18
+CONECT   22   16
+MASTER        0    0    0    0    0    0    0    0   22    0   22    0
+END
