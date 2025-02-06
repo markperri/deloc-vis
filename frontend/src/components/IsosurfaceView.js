@@ -50,7 +50,6 @@ const IsosurfaceView = ({ folderPath }) => {
 
                 if (files["color.glb"]) {
                     gltfLoader.load(files["color.glb"], (gltf) => {
-                        // Dispose old scene before setting new one
                         if (glbScene) {
                             glbScene.traverse((child) => {
                                 if (child.isMesh) {
@@ -66,7 +65,6 @@ const IsosurfaceView = ({ folderPath }) => {
 
                         console.log("GLTF Scene:", gltf.scene);
 
-                        // Find the main molecular object
                         const mainObject = gltf.scene.children.find(child => 
                             child.name.includes("Methylthiophene")
                         );
@@ -78,7 +76,6 @@ const IsosurfaceView = ({ folderPath }) => {
 
                         console.log("Main Object:", mainObject);
 
-                        // Apply materials to atoms based on group names
                         mainObject.children.forEach((group) => {
                             if (group.isObject3D) {
                                 group.children.forEach((mesh) => {
@@ -114,7 +111,6 @@ const IsosurfaceView = ({ folderPath }) => {
         }
     }, [stlMesh, glbScene]);
 
-    // Material Cache to prevent redundant material creation
     const materialCache = {};
 
     const getAtomMaterial = (groupName) => {
