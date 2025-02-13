@@ -1,29 +1,35 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Plot from './Plot/Plot';
 import Mol2Viewer from './Mol';
-import IsosurfaceView  from './IsosurfaceView';
+import IsosurfaceView from './IsosurfaceView';
+
+const VIEW_MODES = {
+  STANDARD: 'standard',
+  DELOCALIZATION: 'delocalization'
+};
 
 function TotalVisual({molecule}) {
   const plots = [0, 5, 10, 15, 20, 25, 30];
   const [openPlotIndex, setOpenPlotIndex] = useState(0);
-  const [theta, setTheta] = useState(0); 
+  const [theta, setTheta] = useState(0);
   const [currentTheta, setCurrentTheta] = useState(0);
   const [phi, setPhi] = useState(0);
   const [overlayMode, setOverlayMode] = useState(false);
   const [overlayPlots, setOverlayPlots] = useState([]);
+  const [viewMode, setViewMode] = useState(VIEW_MODES.STANDARD);
+  const [showHOMO, setShowHOMO] = useState(false);
+  const [isSimulating, setIsSimulating] = useState(false);
   const instructions = '* Graph displays changes in energy due to electron delocalization based on changes the amount the polymer is bent \n'+
                       '* Clicking on the different Phi values will change the graph to show the electron delocalization based on changes in Theta at the specific Phi value \n'+
-                      '* Clicking on any point on the graphs will display a Methylthiophene with the bends and torsions for the specified value of Phi and Theta \n' + 
-                      '* Clicking on the "stop/start rotation" button will stop or start molecular rotation depending on its current state \n'+ 
-                      '* Clicking on the "show isosurface" or "hide isosurface" button will show or hide the isosurface \n'+
-                      '* Clicking on the "start simulation" or "stop simulation" button will start or stop the simulation showing the bending and torsion of the polymer \n'+
+                      '* Clicking on any point on the graphs will display a Methylthiophene with the bends and torsions for the specified value of Phi and Theta \n' +
+                      '* In standard view, you can toggle the HOMO isosurface on/off \n'+
+                      '* You can switch between standard view (molecule with optional HOMO) and delocalization view \n'+
+                      '* The simulation controls work in both views to show the bending and torsion of the polymer \n'+
                       '* Other features for the molecule include the ability to drag, zoom-in, and zoom-out \n'
-  const [isSimulating, setIsSimulating] = useState(false);
+  
   const stopSimulation = () => {
     setIsSimulating(false);
   };
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [showOrbitals, setShowOrbitals] = useState(false);
   const [showAllGraphs, setShowAllGraphs] = useState(false);
   const toggleAllGraphs = () => {
     setShowAllGraphs(!showAllGraphs);
@@ -41,20 +47,24 @@ function TotalVisual({molecule}) {
           clearInterval(interval);
           setIsSimulating(false);
         }
-      }, 1500); 
+      }, 1500);
 
       return () => clearInterval(interval);
     }
-  }, [isSimulating, isAnimating]);
-  const toggleOrbitals = () => {
-    setShowOrbitals(prevShowOrbitals => !prevShowOrbitals);
+  }, [isSimulating]);
+
+  const toggleViewMode = () => {
+    setViewMode(prev =>
+      prev === VIEW_MODES.STANDARD ? VIEW_MODES.DELOCALIZATION : VIEW_MODES.STANDARD
+    );
   };
+
+  const toggleHOMO = () => {
+    setShowHOMO(prev => !prev);
+  };
+
   const startSimulation = () => {
     setIsSimulating(true);
-    console.log(isSimulating);
-  };
-  const stopAnimate = () => {
-    setIsAnimating(prevState => !prevState); 
   };
   
 
@@ -174,30 +184,57 @@ function TotalVisual({molecule}) {
       <h4 style={{ position: 'fixed', top: '180px', left: '900px'}}>
         Phi= {phi} and Theta= {theta}
       </h4>
-      <div style={{ position: 'fixed', top: '240px', left: '900px', border: "2px solid black"}}>
-        <Mol2Viewer Phi={phi} Theta ={theta} filePath={currentFilePath} orbitalPath = {currentFilePathMol} isAnimating={isAnimating} showOrbitals={showOrbitals}/>
+      <div style={{ position: 'fixed', top: '240px', left: '900px', width: '500px', height: '500px', border: "2px solid black"}}>
+        {viewMode === VIEW_MODES.STANDARD ? (
+          <Mol2Viewer
+            Phi={phi}
+            Theta={theta}
+            filePath={currentFilePath}
+            orbitalPath={currentFilePathMol}
+            showOrbitals={showHOMO}
+          />
+        ) : (
+          <IsosurfaceView folderPath={currentFolderPath}/>
+        )}
       </div>
-      <div style={{ position: 'fixed', top: '160px', left: '1350px', width: '600px', height: '900px',border: "2px solid black"}}>
-        <IsosurfaceView folderPath={currentFolderPath}/>
+      
+      {/* Controls Container - Vertical Layout */}
+      <div style={{
+        position: 'fixed',
+        top: '240px',
+        left: '1410px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px'
+      }}>
+        {/* View Mode Toggle */}
+        <button onClick={toggleViewMode}>
+          {viewMode === VIEW_MODES.STANDARD ? 'Show Delocalization' : 'Show Standard View'}
+        </button>
+
+        {/* HOMO Toggle (Standard View Only) */}
+        {viewMode === VIEW_MODES.STANDARD && (
+          <button onClick={toggleHOMO}>
+            {showHOMO ? 'Hide HOMO' : 'Show HOMO'}
+          </button>
+        )}
+
+        {/* Simulation Controls */}
+        <button onClick={startSimulation}>
+          Start Simulation
+        </button>
+        <button onClick={stopSimulation}>
+          Stop Simulation
+        </button>
       </div>
-      <h3 style ={{position: 'fixed', top: '750px',}}>
-        Features and Instructions 
+
+      {/* Instructions */}
+      <h3 style={{position: 'fixed', top: '750px'}}>
+        Features and Instructions
       </h3>
-      <text style ={{position: 'fixed', top: '800px',whiteSpace: 'pre-line'}}>
+      <text style={{position: 'fixed', top: '800px', whiteSpace: 'pre-line'}}>
         {instructions}
       </text>
-      <button onClick={startSimulation} style={{ position: 'fixed', top: '675px', left: '900px' }}>
-        Start Simulation
-      </button>
-      <button onClick={stopSimulation} style={{ position: 'fixed', top: '675px', left: '1045px' }}>
-        Stop Simulation
-      </button>
-      <button onClick={stopAnimate} style={{ position: 'fixed', top: '200px', left: '1175px' }}>
-        Stop/Start Rotation
-      </button>
-      <button onClick={toggleOrbitals} style={{ position: 'fixed', top: '675px', left: '1190px' }}>
-        {showOrbitals ? 'Hide Isosurface' : 'Show Isosurface'}
-      </button>
     </div>
   );
 }

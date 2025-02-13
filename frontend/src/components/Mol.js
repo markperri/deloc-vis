@@ -2,12 +2,17 @@ import React, { useEffect, useRef } from 'react';
 import * as $3Dmol from '3dmol/build/3Dmol.js';
 import { fetchStructureData, fetchCubeData } from '../utils/api';
 
-const MolecularViewer = ({Phi, Theta, filePath, orbitalPath, isAnimating, showOrbitals }) => {
+const Mol2Viewer = ({Phi, Theta, filePath, orbitalPath, showOrbitals }) => {
     const viewerRef = useRef();
     const viewer = useRef(null);
-    const animationFrameId = useRef();
 
     useEffect(() => {
+        // Clear previous viewer if it exists
+        if (viewer.current) {
+            viewer.current.clear();
+            viewer.current = null;
+        }
+
         console.log("viewerRef.current:", viewerRef.current);
         if (!viewerRef.current) {
             console.error("Viewer element is not mounted correctly");
@@ -52,35 +57,22 @@ const MolecularViewer = ({Phi, Theta, filePath, orbitalPath, isAnimating, showOr
                     } else {
                         console.error("viewer is not initialized correctly or addIsosurface method is missing");
                     }
-                
                 })
                 .catch((error) => {
                     console.error("Error loading cube file:", error);
                 });
-        } 
+        }
+
+        // Cleanup function
+        return () => {
+            if (viewer.current) {
+                viewer.current.clear();
+                viewer.current = null;
+            }
+        };
     }, [filePath, orbitalPath, showOrbitals]);
 
-    useEffect(() => {
-        function animate() {
-            if (viewer.current) {
-                viewer.current.rotate(1, { y:0.5 });
-                viewer.current.render();
-                animationFrameId.current = requestAnimationFrame(animate);
-            }
-        }
-        if (isAnimating) {
-            animate();
-        } else if (animationFrameId.current) {
-            cancelAnimationFrame(animationFrameId.current);
-        }
-        return () => {
-            if (animationFrameId.current) {
-                cancelAnimationFrame(animationFrameId.current);
-            }
-        }
-    }, [isAnimating]);
-
-    return <div ref={viewerRef} style={{ width: '400px', height: '400px' }} />;
+    return <div ref={viewerRef} style={{ width: '500px', height: '500px' }} />;
 };
 
-export default MolecularViewer;
+export default Mol2Viewer;

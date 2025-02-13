@@ -129,7 +129,7 @@ const IsosurfaceView = ({ folderPath }) => {
     }, [stlMesh, glbScene]);
 
     return (
-        <Canvas style={{ width: "600px", height: "900px" }} shadows>
+        <Canvas style={{ width: "500px", height: "500px" }} shadows>
             <ambientLight intensity={2} />
             <directionalLight position={[1, 1, 1]} intensity={1} />
 
@@ -139,7 +139,7 @@ const IsosurfaceView = ({ folderPath }) => {
                 {meshMesh && <primitive object={meshMesh} />}
             </group>
 
-            <PerspectiveCamera makeDefault position={[0, 0, 5]} />
+            <PerspectiveCamera makeDefault position={[0, 0, 6]} /> {/* Adjusted for new dimensions */}
             <OrbitControls />
         </Canvas>
     );
