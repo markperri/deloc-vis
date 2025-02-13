@@ -1,8 +1,29 @@
 .plot-container {
-    width: 700px;
-    height: 550px;
-    position: fixed;
-    top: 160px;
-    left: 150px;
-    border: 2px solid black;
-  }
+  width: 700px;
+  height: 500px;
+  position: fixed;
+  top: 160px;
+  left: 150px;
+  border: 2px solid black;
+}
+
+.slider-container {
+  position: fixed;
+  top: 670px;
+  left: 150px;
+  width: 700px;
+  text-align: center;
+  padding: 0 60px;
+  box-sizing: border-box;
+}
+
+.slider-container input[type="range"] {
+  width: 100%;
+  margin: 0;
+}
+
+.slider-label {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 5px;
+}

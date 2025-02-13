@@ -18,8 +18,22 @@ function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, ove
   }, [filePath]);
 
   useEffect(() => {
-    console.log("plot data: " + plotData);
+    const plotDivId = "plot" + (allPhis ? 'All' : Phi);
+    let plotElement;
+    
+    // Cleanup function
+    const cleanup = () => {
+      if (plotElement) {
+        plotElement.removeAllListeners();
+        Plotly.purge(plotDivId);
+      }
+    };
+
+    // Clean up any existing plot
+    cleanup();
+
     if (plotData != null) {
+      // Create new plot
       const traces = [];
       const processPhi = (phiValue) => {
         const E_delocs = [];
@@ -97,28 +111,67 @@ function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, ove
       }
       const layout = {
         title: 'Interactive Plot' + (allPhis ? ' for all Phi Values' : ' for Phi = ' + Phi),
-        xaxis: { title: 'Theta (deg)' },
+        xaxis: {
+          title: 'Theta (deg)',
+          titlefont: { size: 12 },
+          tickfont: { size: 10 }
+        },
         yaxis: {
           title: 'Delocalization energy (kcal/mol)',
-          range: rangeValues 
+          range: rangeValues,
+          titlefont: { size: 12 },
+          tickfont: { size: 10 }
+        },
+        margin: {
+          l: 60,
+          r: 10,
+          t: 50,
+          b: 50
         }
       };
 
-      const plotDivId = 'plot' + (allPhis ? 'All' : Phi);
       Plotly.newPlot(plotDivId, traces, layout);
+      
       if (!allPhis) {
-        const plotElement = document.getElementById(plotDivId);
-        plotElement.on('plotly_click', (data) => {
+        plotElement = document.getElementById(plotDivId);
+        const clickHandler = (data) => {
           const thetaValue = data.points[0].x;
           const E_delocValue = data.points[0].y;
           setHighlightedPoint({ theta: thetaValue, E_deloc: E_delocValue });
           onPointClick(thetaValue);
-        });
+        };
+        plotElement.on('plotly_click', clickHandler);
       }
     }
+
+    // Return cleanup function for component unmount
+    return () => {
+      cleanup();
+    };
   }, [plotData, Phi, allPhis, onPointClick, highlightedPoint, currentTheta, filePath, molecule, overlayMode, overlayPlots]);
 
-  return <div id={"plot" + (allPhis ? 'All' : Phi)} className="plot-container"></div>;
+  return (
+    <>
+      <div className="plot-container">
+        <div id={"plot" + (allPhis ? 'All' : Phi)} style={{ width: '100%', height: '100%' }}></div>
+      </div>
+      {!allPhis && !overlayMode && (
+        <div className="slider-container">
+          <input
+            type="range"
+            min="0"
+            max="350"
+            step="10"
+            value={currentTheta || 0}
+            onChange={(e) => onPointClick(parseInt(e.target.value))}
+          />
+          <div className="slider-label">
+            Theta: {currentTheta || 0}°
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
 
 export default Plot;
