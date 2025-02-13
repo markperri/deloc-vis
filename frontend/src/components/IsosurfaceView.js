@@ -1,10 +1,26 @@
 import React, { useRef, useEffect, useState } from "react";
+import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { fetchModelFiles } from "../utils/api";
+
+const materialCache = {};
+
+const getAtomMaterial = (groupName) => {
+    if (!materialCache[groupName]) {
+        const materialMap = {
+            grp1: new THREE.MeshStandardMaterial({ color: 0x202020, metalness: 0.1, roughness: 0.5 }), // Carbon (black/gray)
+            grp3621: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.5 }), // Sulfur (yellow)
+            grp7241: new THREE.MeshStandardMaterial({ color: 0xFF0000, metalness: 0.1, roughness: 0.5 }), // Oxygen (red)
+            grp7965: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.5 }), // Hydrogen (white)
+            default: new THREE.MeshStandardMaterial({ color: 0x00FF00, metalness: 0.1, roughness: 0.5 }) // Default green
+        };
+        materialCache[groupName] = materialMap[groupName] || materialMap.default;
+    }
+    return materialCache[groupName];
+};
 
 const IsosurfaceView = ({ folderPath }) => {
     const [stlMesh, setStlMesh] = useState(null);
@@ -96,6 +112,7 @@ const IsosurfaceView = ({ folderPath }) => {
         };
 
         loadModels();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [folderPath]);
 
     useEffect(() => {
@@ -110,22 +127,6 @@ const IsosurfaceView = ({ folderPath }) => {
             glbScene.position.add(stlCenter);
         }
     }, [stlMesh, glbScene]);
-
-    const materialCache = {};
-
-    const getAtomMaterial = (groupName) => {
-        if (!materialCache[groupName]) {
-            const materialMap = {
-                grp1: new THREE.MeshStandardMaterial({ color: 0x202020, metalness: 0.1, roughness: 0.5 }), // Carbon (black/gray)
-                grp3621: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.5 }), // Sulfur (yellow)
-                grp7241: new THREE.MeshStandardMaterial({ color: 0xFF0000, metalness: 0.1, roughness: 0.5 }), // Oxygen (red)
-                grp7965: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.5 }), // Hydrogen (white)
-                default: new THREE.MeshStandardMaterial({ color: 0x00FF00, metalness: 0.1, roughness: 0.5 }) // Default green
-            };
-            materialCache[groupName] = materialMap[groupName] || materialMap.default;
-        }
-        return materialCache[groupName];
-    };
 
     return (
         <Canvas style={{ width: "600px", height: "900px" }} shadows>

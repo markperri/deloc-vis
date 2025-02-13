@@ -116,7 +116,7 @@ function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, ove
         });
       }
     }
-  }, [plotData, Phi, allPhis, onPointClick, highlightedPoint, currentTheta, filePath]);
+  }, [plotData, Phi, allPhis, onPointClick, highlightedPoint, currentTheta, filePath, molecule, overlayMode, overlayPlots]);
 
   return <div id={"plot" + (allPhis ? 'All' : Phi)} className="plot-container"></div>;
 }

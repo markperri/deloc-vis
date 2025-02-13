@@ -9,7 +9,6 @@ function TotalVisual({molecule}) {
   const [theta, setTheta] = useState(0); 
   const [currentTheta, setCurrentTheta] = useState(0);
   const [phi, setPhi] = useState(0);
-  const [plots2, setPlots2] = useState([]);
   const [overlayMode, setOverlayMode] = useState(false);
   const [overlayPlots, setOverlayPlots] = useState([]);
   const instructions = '* Graph displays changes in energy due to electron delocalization based on changes the amount the polymer is bent \n'+
