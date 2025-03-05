@@ -80,9 +80,10 @@ const IsosurfaceView = ({ folderPath }) => {
                         gltf.scene.scale.set(0.5, 0.5, 0.5);
 
                         console.log("GLTF Scene:", gltf.scene);
+                        const objectName = folderPath.split("/")[1]; 
 
                         const mainObject = gltf.scene.children.find(child => 
-                            child.name.includes("Methylthiophene")
+                            child.name.includes(objectName)
                         );
 
                         if (!mainObject) {
@@ -90,7 +91,7 @@ const IsosurfaceView = ({ folderPath }) => {
                             return;
                         }
 
-                        console.log("Main Object:", mainObject);
+                        console.log("Main Object:", folderPath);
 
                         mainObject.children.forEach((group) => {
                             if (group.isObject3D) {
