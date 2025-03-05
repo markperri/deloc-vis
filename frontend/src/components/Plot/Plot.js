@@ -22,15 +22,16 @@ function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, ove
     let plotElement;
     
     // Cleanup function
+    /*
     const cleanup = () => {
       if (plotElement) {
         plotElement.removeAllListeners();
         Plotly.purge(plotDivId);
       }
-    };
+    };*/
 
     // Clean up any existing plot
-    cleanup();
+    //cleanup();
 
     if (plotData != null) {
       // Create new plot
@@ -145,9 +146,9 @@ function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, ove
     }
 
     // Return cleanup function for component unmount
-    return () => {
-      cleanup();
-    };
+    //return () => {
+      //cleanup();
+    //};
   }, [plotData, Phi, allPhis, onPointClick, highlightedPoint, currentTheta, filePath, molecule, overlayMode, overlayPlots]);
 
   return (

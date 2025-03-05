@@ -1,0 +1,83 @@
+HEADER    PROTEIN
+COMPND    Converted from Q-Chem input: Dimethyl_Naphthalene_Dicarboximide_Phi_15_Theta_10_Thiophene.qcin 
+AUTHOR    AICD-extract
+ATOM      1  C   UNK     1      -3.142   2.144  -0.129  1.00  0.00 
+ATOM      2  C   UNK     1      -1.974   2.970  -0.119  1.00  0.00 
+ATOM      3  C   UNK     1      -2.878   0.729  -0.055  1.00  0.00 
+ATOM      4  C   UNK     1      -0.670   2.523  -0.048  1.00  0.00 
+ATOM      5  H   UNK     1      -2.099   4.064  -0.172  1.00  0.00 
+ATOM      6  C   UNK     1      -1.514   0.263   0.018  1.00  0.00 
+ATOM      7  C   UNK     1      -0.372   1.133   0.025  1.00  0.00 
+ATOM      8  C   UNK     1      -1.217  -1.127   0.091  1.00  0.00 
+ATOM      9  C   UNK     1       0.989   0.665   0.099  1.00  0.00 
+ATOM     10  C   UNK     1       0.087  -1.577   0.162  1.00  0.00 
+ATOM     11  C   UNK     1       1.252  -0.749   0.171  1.00  0.00 
+ATOM     12  H   UNK     1       0.211  -2.671   0.215  1.00  0.00 
+ATOM     13  C   UNK     1      -3.953  -0.311  -0.050  1.00  0.00 
+ATOM     14  C   UNK     1      -2.276  -2.162   0.095  1.00  0.00 
+ATOM     15  N   UNK     1      -3.580  -1.675   0.024  1.00  0.00 
+ATOM     16  C   UNK     1       0.387   3.565  -0.052  1.00  0.00 
+ATOM     17  C   UNK     1       2.059   1.709   0.094  1.00  0.00 
+ATOM     18  N   UNK     1       1.690   3.071   0.020  1.00  0.00 
+ATOM     19  O   UNK     1      -5.154  -0.056  -0.106  1.00  0.00 
+ATOM     20  O   UNK     1      -2.049  -3.368   0.156  1.00  0.00 
+ATOM     21  O   UNK     1       0.143   4.769  -0.114  1.00  0.00 
+ATOM     22  O   UNK     1       3.265   1.477   0.151  1.00  0.00 
+ATOM     23  C   UNK     1      -4.638  -2.691   0.028  1.00  0.00 
+ATOM     24  H   UNK     1      -5.607  -2.171  -0.032  1.00  0.00 
+ATOM     25  H   UNK     1      -4.570  -3.295   0.953  1.00  0.00 
+ATOM     26  H   UNK     1      -4.502  -3.373  -0.833  1.00  0.00 
+ATOM     27  C   UNK     1       2.796   4.034   0.021  1.00  0.00 
+ATOM     28  H   UNK     1       2.353   5.041  -0.040  1.00  0.00 
+ATOM     29  H   UNK     1       3.464   3.843  -0.840  1.00  0.00 
+ATOM     30  H   UNK     1       3.395   3.921   0.944  1.00  0.00 
+ATOM     31  H   UNK     1      -4.166   2.533  -0.186  1.00  0.00 
+ATOM     32  C   UNK     1       2.523  -1.500   0.255  1.00  0.00 
+ATOM     33  S   UNK     1       2.426  -3.218  -0.150  1.00  0.00 
+ATOM     34  C   UNK     1       4.174  -3.399  -0.374  1.00  0.00 
+ATOM     35  C   UNK     1       3.872  -1.119   0.208  1.00  0.00 
+ATOM     36  C   UNK     1       4.768  -2.151  -0.133  1.00  0.00 
+ATOM     37  H   UNK     1       4.200  -0.091   0.423  1.00  0.00 
+ATOM     38  H   UNK     1       5.855  -1.995  -0.208  1.00  0.00 
+ATOM     39  H   UNK     1       4.612  -4.363  -0.652  1.00  0.00 
+CONECT    1    2    3   31
+CONECT    2    1    4    5
+CONECT    3    1    6   13
+CONECT    4    2    7   16
+CONECT    5    2
+CONECT    6    3    7    8
+CONECT    7    4    6    9
+CONECT    8    6   10   14
+CONECT    9    7   11   17
+CONECT   10    8   11   12
+CONECT   11    9   10   32
+CONECT   12   10
+CONECT   13    3   15   19
+CONECT   14    8   15   20
+CONECT   15   13   14   23
+CONECT   16    4   18   21
+CONECT   17    9   18   22
+CONECT   18   16   17   27
+CONECT   19   13
+CONECT   20   14
+CONECT   21   16
+CONECT   22   17
+CONECT   23   15   24   25   26
+CONECT   24   23
+CONECT   25   23
+CONECT   26   23
+CONECT   27   18   28   29   30
+CONECT   28   27
+CONECT   29   27
+CONECT   30   27
+CONECT   31    1
+CONECT   32   11   33   35
+CONECT   33   32   34
+CONECT   34   33   36   39
+CONECT   35   32   36   37
+CONECT   36   34   35   38
+CONECT   37   35
+CONECT   38   36
+CONECT   39   34
+MASTER        0    0    0    0    0    0    0    0   39    0   39    0
+END

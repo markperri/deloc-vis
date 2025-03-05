@@ -141,13 +141,15 @@ function TotalVisual({molecule}) {
 
   const getFolderPath = (phi, theta) => {
     if(molecule === 'P3HT'){
-        return `pdb-files/Methylthiophene_Phi_${phi}_Theta_${theta}_Methylthiophene`;
+        return `p3ht/Methylthiophene_Phi_${phi}_Theta_${theta}_Methylthiophene`;
     }
     if(molecule === 'PTB7FIN'){
+
     }
     if(molecule === 'PTB7FOUT'){
     }
     if(molecule ==='PNDIT'){
+      return `pndit/Dimethyl_Naphthalene_Dicarboximide_Phi_${phi}_Theta_${theta}_Thiophene`;
     }
   };
 
