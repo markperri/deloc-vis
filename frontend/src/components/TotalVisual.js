@@ -141,10 +141,10 @@ function TotalVisual({molecule}) {
 
   const getFolderPath = (phi, theta) => {
     if(molecule === 'P3HT'){
-        return `p3ht/Methylthiophene_Phi_${phi}_Theta_${theta}_Methylthiophene`;
+      return `p3ht/Methylthiophene_Phi_${phi}_Theta_${theta}_Methylthiophene`;
     }
     if(molecule === 'PTB7FIN'){
-
+      return `fin/fin_bdt_Phi_${phi}_Theta_${theta}_fin_ftt`;
     }
     if(molecule === 'PTB7FOUT'){
     }

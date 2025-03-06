@@ -1,0 +1,89 @@
+HEADER    PROTEIN
+COMPND    Converted from Q-Chem input: fin_bdt_Phi_15_Theta_220_fin_ftt.qcin 
+AUTHOR    AICD-extract
+ATOM      1  C   UNK     1      -6.540  -1.509  -0.193  1.00  0.00 
+ATOM      2  C   UNK     1      -6.049  -0.242  -0.472  1.00  0.00 
+ATOM      3  S   UNK     1      -5.240  -2.600   0.345  1.00  0.00 
+ATOM      4  C   UNK     1      -4.644  -0.107  -0.260  1.00  0.00 
+ATOM      5  H   UNK     1      -6.673   0.590  -0.823  1.00  0.00 
+ATOM      6  C   UNK     1      -4.028  -1.320   0.210  1.00  0.00 
+ATOM      7  C   UNK     1      -2.647  -1.390   0.452  1.00  0.00 
+ATOM      8  C   UNK     1      -3.884   1.074  -0.498  1.00  0.00 
+ATOM      9  C   UNK     1      -2.500   1.003  -0.260  1.00  0.00 
+ATOM     10  C   UNK     1      -1.885  -0.211   0.213  1.00  0.00 
+ATOM     11  O   UNK     1      -4.608   2.149  -0.915  1.00  0.00 
+ATOM     12  O   UNK     1      -1.929  -2.474   0.869  1.00  0.00 
+ATOM     13  C   UNK     1      -2.557  -3.454   1.688  1.00  0.00 
+ATOM     14  H   UNK     1      -1.743  -4.083   2.096  1.00  0.00 
+ATOM     15  H   UNK     1      -3.247  -4.106   1.110  1.00  0.00 
+ATOM     16  H   UNK     1      -3.116  -2.988   2.528  1.00  0.00 
+ATOM     17  C   UNK     1      -3.967   3.229  -1.582  1.00  0.00 
+ATOM     18  H   UNK     1      -4.777   3.865  -1.987  1.00  0.00 
+ATOM     19  H   UNK     1      -3.331   2.874  -2.421  1.00  0.00 
+ATOM     20  H   UNK     1      -3.351   3.843  -0.889  1.00  0.00 
+ATOM     21  C   UNK     1      -0.480  -0.073   0.422  1.00  0.00 
+ATOM     22  S   UNK     1      -1.284   2.283  -0.407  1.00  0.00 
+ATOM     23  C   UNK     1       0.006   1.195   0.134  1.00  0.00 
+ATOM     24  H   UNK     1       0.148  -0.900   0.775  1.00  0.00 
+ATOM     25  H   UNK     1      -7.566  -1.888  -0.268  1.00  0.00 
+ATOM     26  C   UNK     1       1.353   1.681   0.230  1.00  0.00 
+ATOM     27  S   UNK     1       1.671   3.201   1.054  1.00  0.00 
+ATOM     28  C   UNK     1       3.391   2.889   1.251  1.00  0.00 
+ATOM     29  C   UNK     1       2.552   0.968   0.122  1.00  0.00 
+ATOM     30  C   UNK     1       3.704   1.628   0.685  1.00  0.00 
+ATOM     31  C   UNK     1       2.972  -0.282  -0.412  1.00  0.00 
+ATOM     32  C   UNK     1       4.351  -0.526  -0.250  1.00  0.00 
+ATOM     33  S   UNK     1       5.116   0.757   0.541  1.00  0.00 
+ATOM     34  C   UNK     1       5.077  -1.731  -0.695  1.00  0.00 
+ATOM     35  O   UNK     1       4.483  -2.636  -1.264  1.00  0.00 
+ATOM     36  O   UNK     1       6.412  -1.819  -0.461  1.00  0.00 
+ATOM     37  F   UNK     1       2.201  -1.203  -1.024  1.00  0.00 
+ATOM     38  C   UNK     1       7.193  -2.895  -0.824  1.00  0.00 
+ATOM     39  H   UNK     1       8.225  -2.669  -0.499  1.00  0.00 
+ATOM     40  H   UNK     1       7.177  -3.065  -1.924  1.00  0.00 
+ATOM     41  H   UNK     1       6.849  -3.837  -0.343  1.00  0.00 
+ATOM     42  H   UNK     1       4.039   3.619   1.747  1.00  0.00 
+CONECT    1    2    3   25
+CONECT    2    1    4    5
+CONECT    3    1    6
+CONECT    4    2    6    8
+CONECT    5    2
+CONECT    6    3    4    7
+CONECT    7    6   10   12
+CONECT    8    4    9   11
+CONECT    9    8   10   22
+CONECT   10    7    9   21
+CONECT   11    8   17
+CONECT   12    7   13
+CONECT   13   12   14   15   16
+CONECT   14   13
+CONECT   15   13
+CONECT   16   13
+CONECT   17   11   18   19   20
+CONECT   18   17
+CONECT   19   17
+CONECT   20   17
+CONECT   21   10   23   24
+CONECT   22    9   23
+CONECT   23   21   22   26
+CONECT   24   21
+CONECT   25    1
+CONECT   26   23   27   29
+CONECT   27   26   28
+CONECT   28   27   30   42
+CONECT   29   26   30   31
+CONECT   30   28   29   33
+CONECT   31   29   32   37
+CONECT   32   31   33   34
+CONECT   33   30   32
+CONECT   34   32   35   36
+CONECT   35   34
+CONECT   36   34   38
+CONECT   37   31
+CONECT   38   36   39   40   41
+CONECT   39   38
+CONECT   40   38
+CONECT   41   38
+CONECT   42   28
+MASTER        0    0    0    0    0    0    0    0   42    0   42    0
+END
