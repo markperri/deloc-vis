@@ -147,6 +147,7 @@ function TotalVisual({molecule}) {
       return `fin/fin_bdt_Phi_${phi}_Theta_${theta}_fin_ftt`;
     }
     if(molecule === 'PTB7FOUT'){
+      return `fout/Dimethoxy_Benzodithiophene_Phi_${phi}_Theta_${theta}_Methylcarbonyl_3_Fluoro_Thienothiophene`;
     }
     if(molecule ==='PNDIT'){
       return `pndit/Dimethyl_Naphthalene_Dicarboximide_Phi_${phi}_Theta_${theta}_Thiophene`;

@@ -1,0 +1,89 @@
+HEADER    PROTEIN
+COMPND    Converted from Q-Chem input: Dimethoxy_Benzodithiophene_Phi_25_Theta_60_Methylcarbonyl_3_Fluoro_Thienothiophene.qcin 
+AUTHOR    AICD-extract
+ATOM      1  C   UNK     1       6.668  -1.595   0.081  1.00  0.00 
+ATOM      2  C   UNK     1       5.487  -2.115  -0.427  1.00  0.00 
+ATOM      3  S   UNK     1       6.415   0.025   0.775  1.00  0.00 
+ATOM      4  C   UNK     1       4.362  -1.250  -0.273  1.00  0.00 
+ATOM      5  H   UNK     1       5.412  -3.099  -0.906  1.00  0.00 
+ATOM      6  C   UNK     1       4.689  -0.016   0.391  1.00  0.00 
+ATOM      7  C   UNK     1       3.718   0.973   0.611  1.00  0.00 
+ATOM      8  C   UNK     1       3.041  -1.524  -0.731  1.00  0.00 
+ATOM      9  C   UNK     1       2.069  -0.532  -0.514  1.00  0.00 
+ATOM     10  C   UNK     1       2.398   0.702   0.153  1.00  0.00 
+ATOM     11  O   UNK     1       2.878  -2.743  -1.316  1.00  0.00 
+ATOM     12  O   UNK     1       3.892   2.194   1.199  1.00  0.00 
+ATOM     13  C   UNK     1       4.900   2.355   2.190  1.00  0.00 
+ATOM     14  H   UNK     1       4.694   3.323   2.686  1.00  0.00 
+ATOM     15  H   UNK     1       5.920   2.396   1.751  1.00  0.00 
+ATOM     16  H   UNK     1       4.862   1.542   2.947  1.00  0.00 
+ATOM     17  C   UNK     1       1.771  -2.982  -2.177  1.00  0.00 
+ATOM     18  H   UNK     1       1.968  -3.952  -2.670  1.00  0.00 
+ATOM     19  H   UNK     1       1.676  -2.192  -2.953  1.00  0.00 
+ATOM     20  H   UNK     1       0.814  -3.061  -1.616  1.00  0.00 
+ATOM     21  C   UNK     1       1.272   1.565   0.304  1.00  0.00 
+ATOM     22  S   UNK     1       0.343  -0.567  -0.910  1.00  0.00 
+ATOM     23  C   UNK     1       0.094   1.043  -0.214  1.00  0.00 
+ATOM     24  H   UNK     1       1.342   2.549   0.784  1.00  0.00 
+ATOM     25  H   UNK     1       7.671  -2.037   0.096  1.00  0.00 
+ATOM     26  C   UNK     1      -1.217   1.626  -0.236  1.00  0.00 
+ATOM     27  S   UNK     1      -1.514   2.931  -1.375  1.00  0.00 
+ATOM     28  C   UNK     1      -3.230   2.577  -1.539  1.00  0.00 
+ATOM     29  C   UNK     1      -2.419   0.948  -0.004  1.00  0.00 
+ATOM     30  C   UNK     1      -3.557   1.466  -0.722  1.00  0.00 
+ATOM     31  S   UNK     1      -2.807  -0.430   1.010  1.00  0.00 
+ATOM     32  C   UNK     1      -4.497  -0.338   0.496  1.00  0.00 
+ATOM     33  C   UNK     1      -4.727   0.695  -0.400  1.00  0.00 
+ATOM     34  F   UNK     1      -5.934   0.946  -0.916  1.00  0.00 
+ATOM     35  C   UNK     1      -5.399  -1.346   1.075  1.00  0.00 
+ATOM     36  O   UNK     1      -5.028  -2.206   1.861  1.00  0.00 
+ATOM     37  O   UNK     1      -6.676  -1.212   0.639  1.00  0.00 
+ATOM     38  C   UNK     1      -7.601  -2.173   1.168  1.00  0.00 
+ATOM     39  H   UNK     1      -8.580  -1.928   0.720  1.00  0.00 
+ATOM     40  H   UNK     1      -7.652  -2.104   2.274  1.00  0.00 
+ATOM     41  H   UNK     1      -7.297  -3.204   0.898  1.00  0.00 
+ATOM     42  H   UNK     1      -3.869   3.178  -2.194  1.00  0.00 
+CONECT    1    2    3   25
+CONECT    2    1    4    5
+CONECT    3    1    6
+CONECT    4    2    6    8
+CONECT    5    2
+CONECT    6    3    4    7
+CONECT    7    6   10   12
+CONECT    8    4    9   11
+CONECT    9    8   10   22
+CONECT   10    7    9   21
+CONECT   11    8   17
+CONECT   12    7   13
+CONECT   13   12   14   15   16
+CONECT   14   13
+CONECT   15   13
+CONECT   16   13
+CONECT   17   11   18   19   20
+CONECT   18   17
+CONECT   19   17
+CONECT   20   17
+CONECT   21   10   23   24
+CONECT   22    9   23
+CONECT   23   21   22   26
+CONECT   24   21
+CONECT   25    1
+CONECT   26   23   27   29
+CONECT   27   26   28
+CONECT   28   27   30   42
+CONECT   29   26   30   31
+CONECT   30   28   29   33
+CONECT   31   29   32
+CONECT   32   31   33   35
+CONECT   33   30   32   34
+CONECT   34   33
+CONECT   35   32   36   37
+CONECT   36   35
+CONECT   37   35   38
+CONECT   38   37   39   40   41
+CONECT   39   38
+CONECT   40   38
+CONECT   41   38
+CONECT   42   28
+MASTER        0    0    0    0    0    0    0    0   42    0   42    0
+END
