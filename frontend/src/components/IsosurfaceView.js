@@ -1,25 +1,48 @@
 import React, { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { fetchModelFiles } from "../utils/api";
 
+
 const materialCache = {};
 
 const getAtomMaterial = (groupName) => {
     if (!materialCache[groupName]) {
+        console.log(`here`);
         const materialMap = {
-            grp1: new THREE.MeshStandardMaterial({ color: 0x202020, metalness: 0.1, roughness: 0.5 }), // Carbon (black/gray)
-            grp3621: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.5 }), // Sulfur (yellow)
-            grp7241: new THREE.MeshStandardMaterial({ color: 0xFF0000, metalness: 0.1, roughness: 0.5 }), // Oxygen (red)
-            grp7965: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.5 }), // Hydrogen (white)
-            default: new THREE.MeshStandardMaterial({ color: 0x00FF00, metalness: 0.1, roughness: 0.5 }) // Default green
+            grp1: new THREE.MeshStandardMaterial({ color: 0x202020	, metalness: 0.1, roughness: 0.5 }), // Carbon (black/gray)
+            grp3621: new THREE.MeshStandardMaterial({ color: 0xFFFF00	, metalness: 0.1, roughness: 0.5 }), // Sulfur (yellow)
+            grp7241: new THREE.MeshStandardMaterial({ color: 0xFF0000	, metalness: 0.1, roughness: 0.5 }), // Oxygen (red)
+            grp7965: new THREE.MeshStandardMaterial({ color: 0xFFFFFF	, metalness: 0.1, roughness: 0.5 }), // Hydrogen (white)
+            default: new THREE.MeshStandardMaterial({ color: 0xFF0000	, metalness: 0.1, roughness: 0.5 }) // Default green
         };
-        materialCache[groupName] = materialMap[groupName] || materialMap.default;
+        
+        const material = materialMap[groupName] || materialMap.default;
+
+        if (material === materialMap.default) {
+            console.warn(`⚠️ Unknown group: ${groupName}`);
+        }
+
+        materialCache[groupName] = material;
+
     }
     return materialCache[groupName];
+};
+
+const CameraControl = ({ controlRef }) => {
+    const { camera, gl } = useThree();
+
+    useEffect(() => {
+        if (controlRef.current) {
+            controlRef.current.target.set(0, 0, 0); 
+            controlRef.current.update();
+        }
+    }, [controlRef]);
+
+    return <OrbitControls ref={controlRef} args={[camera, gl.domElement]} />;
 };
 
 const IsosurfaceView = ({ folderPath }) => {
@@ -27,6 +50,8 @@ const IsosurfaceView = ({ folderPath }) => {
     const [meshMesh, setMeshMesh] = useState(null);
     const [glbScene, setGlbScene] = useState(null);
     const groupRef = useRef();
+    const cameraRef = useRef();
+    const controlsRef = useRef();
 
     useEffect(() => {
         const loadModels = async () => {
@@ -38,24 +63,24 @@ const IsosurfaceView = ({ folderPath }) => {
                 const stlLoader = new STLLoader();
                 const gltfLoader = new GLTFLoader();
 
-                if (files["Molekeul.stl"]) {
-                    stlLoader.load(files["Molekeul.stl"], (geometry) => {
-                        const mesh = new THREE.Mesh(
-                            geometry,
-                            new THREE.MeshStandardMaterial({ color: 0x00ff00 })
-                        );
-                        mesh.rotation.x = -Math.PI;
-                        mesh.scale.set(0.5, 0.5, 0.5);
-                        setStlMesh(mesh);
-                        console.log("Loaded Molekeul.stl");
-                    });
-                }
+                // Save current camera state
+                const prevPosition = cameraRef.current ? cameraRef.current.position.clone() : null;
+                const prevTarget = controlsRef.current ? controlsRef.current.target.clone() : null;
+
+                
 
                 if (files["Isoober.stl"]) {
                     stlLoader.load(files["Isoober.stl"], (geometry) => {
+                        
+                        geometry.computeVertexNormals();
                         const mesh = new THREE.Mesh(
                             geometry,
-                            new THREE.MeshStandardMaterial({ color: 0xffffff })
+                            new THREE.MeshStandardMaterial({ color:'rgb(255, 255, 4)', 
+                                roughness: 0.8,         // Make surface more matte = stronger shading
+                                metalness: 0.0,         // Non-metallic looks more natural for atoms
+                                side: THREE.DoubleSide,     
+                                flatShading: false   
+                            })
                         );
                         mesh.rotation.x = -Math.PI;
                         mesh.scale.set(0.5, 0.5, 0.5);
@@ -66,15 +91,7 @@ const IsosurfaceView = ({ folderPath }) => {
 
                 if (files["color.glb"]) {
                     gltfLoader.load(files["color.glb"], (gltf) => {
-                        if (glbScene) {
-                            glbScene.traverse((child) => {
-                                if (child.isMesh) {
-                                    child.geometry.dispose();
-                                    if (child.material.map) child.material.map.dispose();
-                                    child.material.dispose();
-                                }
-                            });
-                        }
+                        
 
                         gltf.scene.rotation.x = -Math.PI;
                         gltf.scene.scale.set(0.5, 0.5, 0.5);
@@ -93,41 +110,40 @@ const IsosurfaceView = ({ folderPath }) => {
 
                         console.log("Main Object:", folderPath);
 
-                        mainObject.children.forEach((group) => {
-                            if (group.isObject3D) {
-                                group.children.forEach((mesh) => {
-                                    if (mesh.isMesh) {
-                                        mesh.material = getAtomMaterial(group.name);
-                                    }
-                                });
+                        mainObject.children.forEach((mesh) => {
+                            if (mesh.isMesh) {
+                              const groupName = mesh.name;
+                              const material = getAtomMaterial(groupName);
+                          
+                              console.log(`Assigning material to mesh: ${mesh.name}, color: ${material.color.getHexString()}`);
+                          
+                              mesh.material = material;
                             }
-                        });
+                          });
 
                         setGlbScene(gltf.scene);
                         console.log("Loaded color.glb with colored atoms");
                     });
                 }
+
+                // Restore previous camera position and target after models load
+                setTimeout(() => {
+                    if (prevPosition && cameraRef.current) {
+                        cameraRef.current.position.copy(prevPosition);
+                    }
+                    if (prevTarget && controlsRef.current) {
+                        controlsRef.current.target.copy(prevTarget);
+                        controlsRef.current.update();
+                    }
+                }, 100); // Slight delay to ensure scene updates
+
             } catch (error) {
                 console.error("Error loading models:", error);
             }
         };
 
         loadModels();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [folderPath]);
-
-    useEffect(() => {
-        if (stlMesh && glbScene) {
-            const stlBox = new THREE.Box3().setFromObject(stlMesh);
-            const stlCenter = stlBox.getCenter(new THREE.Vector3());
-
-            const glbBox = new THREE.Box3().setFromObject(glbScene);
-            const glbCenter = glbBox.getCenter(new THREE.Vector3());
-
-            glbScene.position.sub(glbCenter);
-            glbScene.position.add(stlCenter);
-        }
-    }, [stlMesh, glbScene]);
 
     return (
         <Canvas style={{ width: "500px", height: "500px" }} shadows>
@@ -140,8 +156,8 @@ const IsosurfaceView = ({ folderPath }) => {
                 {meshMesh && <primitive object={meshMesh} />}
             </group>
 
-            <PerspectiveCamera makeDefault position={[0, 0, 6]} /> {/* Adjusted for new dimensions */}
-            <OrbitControls />
+            <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 0, 6]} />
+            <CameraControl controlRef={controlsRef} />
         </Canvas>
     );
 };
