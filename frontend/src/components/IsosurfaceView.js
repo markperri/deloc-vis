@@ -9,28 +9,51 @@ import { fetchModelFiles } from "../utils/api";
 
 const materialCache = {};
 
-const getAtomMaterial = (groupName) => {
-    if (!materialCache[groupName]) {
-        console.log(`here`);
-        const materialMap = {
-            grp1: new THREE.MeshStandardMaterial({ color: 0x202020	, metalness: 0.1, roughness: 0.5 }), // Carbon (black/gray)
-            grp3621: new THREE.MeshStandardMaterial({ color: 0xFFFF00	, metalness: 0.1, roughness: 0.5 }), // Sulfur (yellow)
-            grp7241: new THREE.MeshStandardMaterial({ color: 0xFF0000	, metalness: 0.1, roughness: 0.5 }), // Oxygen (red)
-            grp7965: new THREE.MeshStandardMaterial({ color: 0xFFFFFF	, metalness: 0.1, roughness: 0.5 }), // Hydrogen (white)
-            default: new THREE.MeshStandardMaterial({ color: 0xFF0000	, metalness: 0.1, roughness: 0.5 }) // Default green
-        };
-        
-        const material = materialMap[groupName] || materialMap.default;
+const materialPresets = {
+    all: {
+        grp1: new THREE.MeshStandardMaterial({ color: 0x808080, metalness: 0.1, roughness: 0.5 }), // Carbon
+        default: new THREE.MeshStandardMaterial({ color: 0x808080, metalness: 0.1, roughness: 0.5 }) // Default
+    },
+    pndit: {
+        grp7241: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.5 }), // H
+        grp12039: new THREE.MeshStandardMaterial({ color: 0xFF0000, metalness: 0.1, roughness: 0.5 }), // O
+        grp13757: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.5 }), // S
+        grp11585: new THREE.MeshStandardMaterial({ color: 0x00008B, metalness: 0.1, roughness: 0.5 })  // N
+    },
+    p3ht: {
+        grp7241: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.5 }), // S
+        grp3621: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.5 })  // H
+    },
+    fout: {
+        grp7241: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.5 }), // S
+        grp8689: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.5 }), // H
+        grp13395: new THREE.MeshStandardMaterial({ color: 0xFF0000, metalness: 0.1, roughness: 0.5 }), // O
+        grp14843: new THREE.MeshStandardMaterial({ color: 0xFFB6C1, metalness: 0.1, roughness: 0.5 })  // ??
+    },
+    fin: {
+        grp7241: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.5 }), // S
+        grp8689: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.5 }), // H
+        grp13395: new THREE.MeshStandardMaterial({ color: 0xFF0000, metalness: 0.1, roughness: 0.5 }), // O
+        grp14843: new THREE.MeshStandardMaterial({ color: 0xFFB6C1, metalness: 0.1, roughness: 0.5 })  // ??
+    }
+};
 
-        if (material === materialMap.default) {
-            console.warn(`⚠️ Unknown group: ${groupName}`);
+const getAtomMaterial = (groupName, moleculeName) => {
+    const preset = { ...materialPresets.all, ...materialPresets[moleculeName] };
+
+    if (!materialCache[groupName]) {
+        const material = preset[groupName] || preset.default;
+
+        if (!preset[groupName]) {
+            console.warn(`⚠️ Unknown group: ${groupName} for molecule: ${moleculeName}`);
         }
 
         materialCache[groupName] = material;
-
     }
+
     return materialCache[groupName];
 };
+
 
 const CameraControl = ({ controlRef }) => {
     const { camera, gl } = useThree();
@@ -76,8 +99,8 @@ const IsosurfaceView = ({ folderPath }) => {
                         const mesh = new THREE.Mesh(
                             geometry,
                             new THREE.MeshStandardMaterial({ color:'rgb(255, 255, 4)', 
-                                roughness: 0.8,         // Make surface more matte = stronger shading
-                                metalness: 0.0,         // Non-metallic looks more natural for atoms
+                                roughness: 0.8,         
+                                metalness: 0.0,         
                                 side: THREE.DoubleSide,     
                                 flatShading: false   
                             })
@@ -113,7 +136,9 @@ const IsosurfaceView = ({ folderPath }) => {
                         mainObject.children.forEach((mesh) => {
                             if (mesh.isMesh) {
                               const groupName = mesh.name;
-                              const material = getAtomMaterial(groupName);
+                              const moleculeName = folderPath.split("/")[0];
+                              console.log(moleculeName)
+                              const material = getAtomMaterial(groupName, moleculeName);
                           
                               console.log(`Assigning material to mesh: ${mesh.name}, color: ${material.color.getHexString()}`);
                           
