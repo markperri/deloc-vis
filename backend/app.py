@@ -2,11 +2,17 @@ from flask import Flask, jsonify, Response
 from flask_cors import CORS
 import pandas as pd
 import os
-import base64 
+import base64
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 
-CORS(app, resources={r"*": {"origins": "*"}})
+# Configure CORS
+allowed_origins = os.getenv('ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
+CORS(app, resources={r"*": {"origins": allowed_origins}})
 
 def encode_file_to_base64(file_path):
     """Reads a file and returns its base64-encoded content."""

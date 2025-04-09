@@ -3,6 +3,7 @@ from typing import List, Optional
 import re
 import argparse
 import sys
+import numpy as np
 
 class UnexpectedOrbitalLineError(Exception):
     pass
@@ -116,9 +117,10 @@ def rank_pi_orbitals(orbitals):
         score += (p_to_s_ratio-1) * P_S_RATIO_WEIGHT
 
         energies = [orb.eigenvalue for orb in orbitals]
+        median_eng = np.median(energies)
         min_energy, max_energy = min(energies), max(energies)
         energy_score = analyze_relative_energy(orbital, min_energy, max_energy)
-        if energy_score < 0.95:
+        if orbital.eigenvalue < median_eng:
             score = 0
         else:
             score += energy_score * ENERGY_WEIGHT
