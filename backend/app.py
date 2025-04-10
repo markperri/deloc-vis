@@ -10,9 +10,8 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Configure CORS
-allowed_origins = os.getenv('ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
-CORS(app, resources={r"*": {"origins": allowed_origins}})
+# Configure CORS - Allow all origins during development
+CORS(app, resources={r"*": {"origins": "*"}})
 
 def encode_file_to_base64(file_path):
     """Reads a file and returns its base64-encoded content."""

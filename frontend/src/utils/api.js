@@ -1,6 +1,8 @@
+const API_URL = process.env.REACT_APP_API_URL;
+
 export const fetchPlotData = async (filePath) => {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/plot_data/${encodeURIComponent(filePath)}`, { method: 'GET' });
+        const response = await fetch(`${API_URL}/plot_data/${encodeURIComponent(filePath)}`, { method: 'GET' });
         if (!response.ok) {
           throw new Error('Network response was not ok: ' + response.statusText);
         }
@@ -15,7 +17,7 @@ export const fetchPlotData = async (filePath) => {
 
 export const fetchStructureData = async (filePath) => {
     try {
-        const url = `http://127.0.0.1:5000/structures/${encodeURIComponent(filePath)}`;
+        const url = `${API_URL}/structures/${encodeURIComponent(filePath)}`;
         const response = await fetch(url, { method: 'GET' });
         if (!response.ok) {
             throw new Error('Network response was not ok: ' + response.statusText);
@@ -31,7 +33,7 @@ export const fetchStructureData = async (filePath) => {
 
 export const fetchCubeData = async (filePath) => {
     try {
-        const url = `http://127.0.0.1:5000/cubes/${encodeURIComponent(filePath)}`;
+        const url = `${API_URL}/cubes/${encodeURIComponent(filePath)}`;
         const response = await fetch(url, { method: 'GET' });
         if (!response.ok) {
             throw new Error('Network response was not ok: ' + response.statusText);
@@ -46,7 +48,7 @@ export const fetchCubeData = async (filePath) => {
 
   export const fetchModelFiles = async (folderPath) => {
     try {
-        const url = `http://127.0.0.1:5000/folder/${encodeURIComponent(folderPath)}`;
+        const url = `${API_URL}/folder/${encodeURIComponent(folderPath)}`;
         const response = await fetch(url, { method: 'GET' });
 
         if (!response.ok) {
