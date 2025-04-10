@@ -13,7 +13,9 @@ app = Flask(__name__)
 # Configure CORS - Allow specific origins
 CORS(app, resources={r"*": {"origins": [
     "https://lrg-computational.github.io",
-    "http://localhost:3000"  # Allow local development
+    "http://localhost:3000",  # Allow local development
+    "https://*.netlify.app",  # Allow Netlify default domains
+    "https://deloc-vis.netlify.app"  # Allow specific Netlify domain
 ]}})
 
 def encode_file_to_base64(file_path):
