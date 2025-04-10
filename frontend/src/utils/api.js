@@ -1,16 +1,38 @@
 const API_URL = process.env.REACT_APP_API_URL;
+console.log('API URL:', API_URL); // Debug API URL
+
+if (!API_URL) {
+  console.error('API_URL is not set! Check environment variables.');
+}
 
 export const fetchPlotData = async (filePath) => {
     try {
-        const response = await fetch(`${API_URL}/plot_data/${encodeURIComponent(filePath)}`, { method: 'GET' });
+        console.log('Fetching plot data from:', `${API_URL}/plot_data/${encodeURIComponent(filePath)}`);
+        const response = await fetch(`${API_URL}/plot_data/${encodeURIComponent(filePath)}`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        
         if (!response.ok) {
-          throw new Error('Network response was not ok: ' + response.statusText);
+          console.error('Response not OK:', {
+            status: response.status,
+            statusText: response.statusText,
+            headers: Object.fromEntries(response.headers.entries())
+          });
+          throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
         }
+
         const data = await response.json();
-        console.log(data);
+        console.log('Successfully fetched plot data:', data);
         return data;
       } catch (error) {
-        console.error('Error fetching plot data:', error);
+        console.error('Error fetching plot data:', {
+          message: error.message,
+          filePath,
+          API_URL
+        });
         throw error;
       }
   };

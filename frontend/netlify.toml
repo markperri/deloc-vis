@@ -10,3 +10,4 @@
 
 [build.environment]
   CI = "false"
+  REACT_APP_API_URL = "https://deloc-vis-backend.onrender.com"
