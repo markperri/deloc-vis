@@ -1,29 +1,81 @@
 .plot-container {
-  width: 700px;
-  height: 500px;
-  position: fixed;
-  top: 160px;
-  left: 150px;
-  border: 2px solid black;
+  width: 100%;
+  height: 400px;
+  position: relative;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+  margin-bottom: 1rem;
 }
 
 .slider-container {
-  position: fixed;
-  top: 670px;
-  left: 150px;
-  width: 700px;
+  position: relative;
+  width: 100%;
   text-align: center;
-  padding: 0 60px;
+  padding: 1rem;
   box-sizing: border-box;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 0.5rem;
 }
 
 .slider-container input[type="range"] {
   width: 100%;
   margin: 0;
+  height: 2px;
+  -webkit-appearance: none;
+  background: #ddd;
+  outline: none;
+  border-radius: 2px;
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb:hover {
+  background: #0056b3;
+  transform: scale(1.1);
+}
+
+.slider-container input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.slider-container input[type="range"]::-moz-range-thumb:hover {
+  background: #0056b3;
+  transform: scale(1.1);
 }
 
 .slider-label {
-  font-size: 0.9em;
+  font-size: 0.9rem;
   color: #666;
-  margin-top: 5px;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .plot-container {
+    height: 300px;
+  }
+
+  .slider-container {
+    padding: 0.75rem;
+  }
 }

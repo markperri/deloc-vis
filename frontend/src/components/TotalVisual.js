@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Plot from './Plot/Plot';
 import Mol2Viewer from './Mol';
 import IsosurfaceView from './IsosurfaceView';
+import styles from './TotalVisual.module.css';
 
 const VIEW_MODES = {
   STANDARD: 'standard',
@@ -67,7 +68,6 @@ function TotalVisual({molecule}) {
     setIsSimulating(true);
   };
   
-
   const handleClick = (index, phi) => {
     if (overlayMode) {
       setOverlayPlots(prevOverlayPlots => {
@@ -160,84 +160,130 @@ function TotalVisual({molecule}) {
   const currentFolderPath = openPlotIndex !== null ? getFolderPath(plots[openPlotIndex], theta) : '';
 
   return (
-    <div className="App" style={{ marginTop: '50px', marginLeft: '30px' }}>
-    <button onClick={handleOverlayClick} style={{ position: 'fixed', top: '130px', left: '430px' }}>
-      {overlayMode ? "Stop Overlaying Plots" : "Overlay Plots"}
-    </button>      
-    <button onClick={toggleAllGraphs} style={{ position: 'fixed', top: '680px', left: '53px' }}>
-        {showAllGraphs ? 'Close All' : 'Open All'}
-      </button>
-      <div style={{ marginTop: '150px' }}>
-        {showAllGraphs ? (
-          <Plot molecule = {molecule} allPhis= {plots} Phi={null} onPointClick={handlePointClick} currentTheta={currentTheta} filePath ={currentFilePathPlot}/>
-        ) : (
-        <div style={{ position: 'fixed', top: '150px', left: '38px'}}>
-          {plots.map((phi, index) => (
-            <div key={phi} style={{ padding: '15px'}}>
-              <button onClick={() => handleClick(index, phi)}>Phi = {phi}</button>
-              {openPlotIndex === index && <Plot molecule = {molecule} Phi={phi} onPointClick={handlePointClick} overlayPlots={overlayPlots} overlayMode= {overlayMode} currentTheta={currentTheta} filePath ={currentFilePathPlot}/>}
-            </div>
-          ))}
-        </div>
-        )}
-      </div>
-      <h3 style={{ position: 'fixed', top: '140px', left: '900px'}}>
-        {molecule} Molecular Viewer
-      </h3>
-      <h4 style={{ position: 'fixed', top: '180px', left: '900px'}}>
-        Phi= {phi} and Theta= {theta}
-      </h4>
-      <div style={{ position: 'fixed', top: '240px', left: '900px', width: '500px', height: '500px', border: "2px solid black"}}>
-        {viewMode === VIEW_MODES.STANDARD ? (
-          <Mol2Viewer
-            Phi={phi}
-            Theta={theta}
-            filePath={currentFilePath}
-            orbitalPath={currentFilePathMol}
-            showOrbitals={showHOMO}
-          />
-        ) : (
-          <IsosurfaceView folderPath={currentFolderPath}/>
-        )}
-      </div>
-      
-      {/* Controls Container - Vertical Layout */}
-      <div style={{
-        position: 'fixed',
-        top: '240px',
-        left: '1410px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '10px'
-      }}>
-        {/* View Mode Toggle */}
-        <button onClick={toggleViewMode}>
-          {viewMode === VIEW_MODES.STANDARD ? 'Show Delocalization' : 'Show Standard View'}
-        </button>
-
-        {/* HOMO Toggle (Standard View Only) */}
-        {viewMode === VIEW_MODES.STANDARD && (
-          <button onClick={toggleHOMO}>
-            {showHOMO ? 'Hide HOMO' : 'Show HOMO'}
+    <div className={styles.container}>
+      {/* Plot Section */}
+      <div className={styles.plotSection}>
+        <div className={styles.plotControls}>
+          <button
+            className={styles.overlayButton}
+            onClick={handleOverlayClick}
+          >
+            {overlayMode ? "Stop Overlaying Plots" : "Overlay Plots"}
           </button>
+          <button
+            className={styles.overlayButton}
+            onClick={toggleAllGraphs}
+          >
+            {showAllGraphs ? 'Close All' : 'Open All'}
+          </button>
+        </div>
+        
+        {showAllGraphs ? (
+          <div className={styles.plotItem}>
+            <Plot
+              molecule={molecule}
+              allPhis={plots}
+              Phi={null}
+              onPointClick={handlePointClick}
+              currentTheta={currentTheta}
+              filePath={currentFilePathPlot}
+            />
+          </div>
+        ) : (
+          <div className={styles.plotList}>
+            {plots.map((phi, index) => (
+              <div key={phi} className={styles.plotItem}>
+                <button
+                  className={styles.overlayButton}
+                  onClick={() => handleClick(index, phi)}
+                >
+                  Phi = {phi}
+                </button>
+                {openPlotIndex === index && (
+                  <Plot
+                    molecule={molecule}
+                    Phi={phi}
+                    onPointClick={handlePointClick}
+                    overlayPlots={overlayPlots}
+                    overlayMode={overlayMode}
+                    currentTheta={currentTheta}
+                    filePath={currentFilePathPlot}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
         )}
-
-        {/* Simulation Controls */}
-        <button onClick={startSimulation}>
-          Start Simulation
-        </button>
-        <button onClick={stopSimulation}>
-          Stop Simulation
-        </button>
       </div>
 
-      {/* Instructions */}
-      <h3 style={{position: 'fixed', top: '750px'}}>
-        Features and Instructions
-      </h3>
-      <text style={{position: 'fixed', top: '800px', whiteSpace: 'pre-line'}}>
-        {instructions}
-      </text>
+      {/* Viewer Section */}
+      <div className={styles.viewerSection}>
+        <div className={styles.viewerHeader}>
+          <h3 className={styles.viewerTitle}>
+            {molecule} Molecular Viewer
+          </h3>
+          <h4 className={styles.viewerSubtitle}>
+            Phi= {phi !== null ? phi : 0} and Theta= {theta}
+          </h4>
+        </div>
+
+        <div className={styles.viewerContainer}>
+          <div className={styles.viewerContent}>
+            {viewMode === VIEW_MODES.STANDARD ? (
+              <Mol2Viewer
+                Phi={phi}
+                Theta={theta}
+                filePath={currentFilePath}
+                orbitalPath={currentFilePathMol}
+                showOrbitals={showHOMO}
+              />
+            ) : (
+              <IsosurfaceView folderPath={currentFolderPath}/>
+            )}
+          </div>
+        </div>
+
+        <div className={styles.controlsSection}>
+          <button
+            className={`${styles.button} ${styles.secondary}`}
+            onClick={toggleViewMode}
+          >
+            {viewMode === VIEW_MODES.STANDARD ? 'Show Delocalization' : 'Show Standard View'}
+          </button>
+
+          {viewMode === VIEW_MODES.STANDARD && (
+            <button
+              className={`${styles.button} ${styles.secondary}`}
+              onClick={toggleHOMO}
+            >
+              {showHOMO ? 'Hide HOMO' : 'Show HOMO'}
+            </button>
+          )}
+
+          <button
+            className={styles.button}
+            onClick={startSimulation}
+          >
+            Start Simulation
+          </button>
+          <button
+            className={`${styles.button} ${styles.secondary}`}
+            onClick={stopSimulation}
+          >
+            Stop Simulation
+          </button>
+        </div>
+      </div>
+
+      {/* Instructions Section */}
+      <div className={styles.instructionsSection}>
+        <h3 className={styles.instructionsTitle}>
+          Features and Instructions
+        </h3>
+        <div className={styles.instructionsText}>
+          {instructions}
+        </div>
+      </div>
     </div>
   );
 }

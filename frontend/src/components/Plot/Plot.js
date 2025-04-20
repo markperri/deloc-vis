@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Plotly from 'plotly.js';
 import './Plot.css';
 import { fetchPlotData } from '../../utils/api';
@@ -6,6 +6,8 @@ import { fetchPlotData } from '../../utils/api';
 function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, overlayPlots, overlayMode}) {
   const [plotData, setPlotData] = useState();
   const [highlightedPoint, setHighlightedPoint] = useState(null);
+
+  // Fetch plot data
   useEffect(() => {
     if (filePath) {
       fetchPlotData(filePath)
@@ -17,21 +19,41 @@ function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, ove
     }
   }, [filePath]);
 
+  // Create resize handler
+  const createResizeHandler = useCallback((plotDivId) => {
+    return () => {
+      const plotDiv = document.getElementById(plotDivId);
+      if (plotDiv) {
+        Plotly.Plots.resize(plotDiv);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     const plotDivId = "plot" + (allPhis ? 'All' : Phi);
-    let plotElement;
+    let plotElement = null;
+    let resizeHandler = null;
     
     // Cleanup function
-    /*
     const cleanup = () => {
-      if (plotElement) {
-        plotElement.removeAllListeners();
-        Plotly.purge(plotDivId);
+      const plotDiv = document.getElementById(plotDivId);
+      if (plotDiv) {
+        if (plotElement) {
+          plotElement.removeAllListeners();
+        }
+        if (resizeHandler) {
+          window.removeEventListener('resize', resizeHandler);
+        }
+        try {
+          Plotly.purge(plotDiv);
+        } catch (e) {
+          console.warn('Failed to purge plot:', e);
+        }
       }
-    };*/
+    };
 
     // Clean up any existing plot
-    //cleanup();
+    cleanup();
 
     if (plotData != null) {
       // Create new plot
@@ -39,7 +61,6 @@ function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, ove
       const processPhi = (phiValue) => {
         const E_delocs = [];
         const Thetas = [];
-
         
         plotData.forEach(item => {
           if (item.Phi === phiValue) {
@@ -58,6 +79,7 @@ function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, ove
         };
         traces.push(trace);
       };
+
       if (overlayMode) {
         overlayPlots.forEach(phiValue => {
           processPhi(phiValue);
@@ -85,6 +107,7 @@ function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, ove
           traces.push(currentThetaTrace);
         }
       }
+
       if (highlightedPoint) {
         const highlightTrace = {
           type: 'scatter',
@@ -96,8 +119,8 @@ function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, ove
         };
         traces.push(highlightTrace);
       }
-      let rangeValues;
 
+      let rangeValues;
       if(molecule === 'P3HT'){
         //rangeValues = [1.098, 1.107];
       }
@@ -110,6 +133,7 @@ function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, ove
       if(molecule ==='PNDIT'){
         //rangeValues = [1.04, 1.065];
       }
+
       const layout = {
         title: 'Interactive Plot' + (allPhis ? ' for all Phi Values' : ' for Phi = ' + Phi),
         xaxis: {
@@ -128,28 +152,42 @@ function Plot({molecule, allPhis, Phi, onPointClick, currentTheta, filePath, ove
           r: 10,
           t: 50,
           b: 50
-        }
+        },
+        autosize: true,
+        responsive: true,
+        useResizeHandler: true
       };
 
-      Plotly.newPlot(plotDivId, traces, layout);
-      
-      if (!allPhis) {
-        plotElement = document.getElementById(plotDivId);
-        const clickHandler = (data) => {
-          const thetaValue = data.points[0].x;
-          const E_delocValue = data.points[0].y;
-          setHighlightedPoint({ theta: thetaValue, E_deloc: E_delocValue });
-          onPointClick(thetaValue);
-        };
-        plotElement.on('plotly_click', clickHandler);
+      const config = {
+        displayModeBar: true,
+        responsive: true,
+        scrollZoom: true
+      };
+
+      const plotDiv = document.getElementById(plotDivId);
+      if (plotDiv) {
+        Plotly.newPlot(plotDiv, traces, layout, config).then(() => {
+          // Add resize handler after plot is created
+          resizeHandler = createResizeHandler(plotDivId);
+          window.addEventListener('resize', resizeHandler);
+          
+          if (!allPhis) {
+            plotElement = plotDiv;
+            const clickHandler = (data) => {
+              const thetaValue = data.points[0].x;
+              const E_delocValue = data.points[0].y;
+              setHighlightedPoint({ theta: thetaValue, E_deloc: E_delocValue });
+              onPointClick(thetaValue);
+            };
+            plotElement.on('plotly_click', clickHandler);
+          }
+        });
       }
     }
 
     // Return cleanup function for component unmount
-    //return () => {
-      //cleanup();
-    //};
-  }, [plotData, Phi, allPhis, onPointClick, highlightedPoint, currentTheta, filePath, molecule, overlayMode, overlayPlots]);
+    return cleanup;
+  }, [plotData, Phi, allPhis, onPointClick, highlightedPoint, currentTheta, filePath, molecule, overlayMode, overlayPlots, createResizeHandler]);
 
   return (
     <>

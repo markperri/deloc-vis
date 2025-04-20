@@ -171,7 +171,7 @@ const IsosurfaceView = ({ folderPath }) => {
     }, [folderPath]);
 
     return (
-        <Canvas style={{ width: "500px", height: "500px" }} shadows>
+        <Canvas style={{ width: "100%", height: "100%" }} shadows>
             <ambientLight intensity={2} />
             <directionalLight position={[1, 1, 1]} intensity={1} />
 
