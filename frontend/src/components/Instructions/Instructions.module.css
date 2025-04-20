@@ -1,0 +1,53 @@
+.instructions {
+  color: #333;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  color: #333;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.75rem;
+}
+
+.content {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.content li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.content li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .content {
+    font-size: 0.95rem;
+  }
+
+  .content li {
+    padding-left: 1.25rem;
+    margin-bottom: 0.875rem;
+  }
+}

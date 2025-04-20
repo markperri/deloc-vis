@@ -20,18 +20,12 @@ function TotalVisual({molecule}) {
   const [viewMode, setViewMode] = useState(VIEW_MODES.STANDARD);
   const [showHOMO, setShowHOMO] = useState(false);
   const [isSimulating, setIsSimulating] = useState(false);
-  const instructions = '* Graph displays changes in energy due to electron delocalization based on changes the amount the polymer is bent \n'+
-                      '* Clicking on the different Phi values will change the graph to show the electron delocalization based on changes in Theta at the specific Phi value \n'+
-                      '* Clicking on any point on the graphs will display a Methylthiophene with the bends and torsions for the specified value of Phi and Theta \n' +
-                      '* In standard view, you can toggle the HOMO isosurface on/off \n'+
-                      '* You can switch between standard view (molecule with optional HOMO) and delocalization view \n'+
-                      '* The simulation controls work in both views to show the bending and torsion of the polymer \n'+
-                      '* Other features for the molecule include the ability to drag, zoom-in, and zoom-out \n'
-  
+  const [showAllGraphs, setShowAllGraphs] = useState(false);
+
   const stopSimulation = () => {
     setIsSimulating(false);
   };
-  const [showAllGraphs, setShowAllGraphs] = useState(false);
+
   const toggleAllGraphs = () => {
     setShowAllGraphs(!showAllGraphs);
     setPhi(null);
@@ -110,6 +104,7 @@ function TotalVisual({molecule}) {
         return `pndit-mol2s/Dimethyl_Naphthalene_Dicarboximide_Phi_${phi}_Theta_${theta}_Thiophene.mol2`
     }
   };
+
   const getFilePathMol = (phi, theta) => {
     if(molecule === 'P3HT'){
         return `p3ht-cubes/Methylthiophene_Phi_${phi}_Theta_${theta}_Methylthiophene.cube`;
@@ -124,6 +119,7 @@ function TotalVisual({molecule}) {
         return `pndit-cubes/Dimethyl_Naphthalene_Dicarboximide_Phi_${phi}_Theta_${theta}_Thiophene.cube`
     }
   };
+
   const getFilePathPlot = () => {
     if(molecule === 'P3HT'){
         return `p3mt.csv`;
@@ -272,16 +268,6 @@ function TotalVisual({molecule}) {
           >
             Stop Simulation
           </button>
-        </div>
-      </div>
-
-      {/* Instructions Section */}
-      <div className={styles.instructionsSection}>
-        <h3 className={styles.instructionsTitle}>
-          Features and Instructions
-        </h3>
-        <div className={styles.instructionsText}>
-          {instructions}
         </div>
       </div>
     </div>

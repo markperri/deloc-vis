@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TotalVisual from './components/TotalVisual';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import Modal from './components/Modal/Modal';
+import Instructions from './components/Instructions/Instructions';
 import styles from './App.module.css';
 
 const NavBar = () => {
   const location = useLocation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const isActive = (path) => {
     return location.pathname === path ? styles.active : '';
@@ -21,7 +24,16 @@ const NavBar = () => {
         <Link to="/P3HT" className={`${styles.navLink} ${isActive('/P3HT')}`}>P3HT</Link>
         <Link to="/PTB7FOUT" className={`${styles.navLink} ${isActive('/PTB7FOUT')}`}>PTB7FOUT</Link>
         <Link to="/PTB7FIN" className={`${styles.navLink} ${isActive('/PTB7FIN')}`}>PTB7FIN</Link>
+        <button 
+          className={styles.navLink} 
+          onClick={() => setIsModalOpen(true)}
+        >
+          Features & Instructions
+        </button>
       </div>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <Instructions />
+      </Modal>
     </nav>
   );
 };
