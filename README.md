@@ -1,6 +1,6 @@
 # Visualization Tool for Energy Displacement of Electron Delocalization
 
-By Shruti Bhamidipati
+Shruti Bhamidipati and Robert Ramji
 
 ## Getting Started
 
