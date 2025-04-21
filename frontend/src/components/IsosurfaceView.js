@@ -86,7 +86,6 @@ const IsosurfaceView = ({ folderPath }) => {
                 const stlLoader = new STLLoader();
                 const gltfLoader = new GLTFLoader();
 
-                // Save current camera state
                 const prevPosition = cameraRef.current ? cameraRef.current.position.clone() : null;
                 const prevTarget = controlsRef.current ? controlsRef.current.target.clone() : null;
 
@@ -99,10 +98,9 @@ const IsosurfaceView = ({ folderPath }) => {
                         const mesh = new THREE.Mesh(
                             geometry,
                             new THREE.MeshStandardMaterial({ color:'rgb(255, 255, 4)', 
-                                roughness: 0.8,         
+                                roughness: 1,         
                                 metalness: 0.0,         
                                 side: THREE.DoubleSide,     
-                                flatShading: false   
                             })
                         );
                         mesh.rotation.x = -Math.PI;
@@ -151,17 +149,7 @@ const IsosurfaceView = ({ folderPath }) => {
                     });
                 }
 
-                // Restore previous camera position and target after models load
-                setTimeout(() => {
-                    if (prevPosition && cameraRef.current) {
-                        cameraRef.current.position.copy(prevPosition);
-                    }
-                    if (prevTarget && controlsRef.current) {
-                        controlsRef.current.target.copy(prevTarget);
-                        controlsRef.current.update();
-                    }
-                }, 100); // Slight delay to ensure scene updates
-
+                
             } catch (error) {
                 console.error("Error loading models:", error);
             }
