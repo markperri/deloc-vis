@@ -56,7 +56,7 @@ CONECT   13    3   15   19
 CONECT   14    8   15   20
 CONECT   15   13   14   23
 CONECT   16    4   18   21
-CONECT   17    9   18   22
+CONECT   17    9   18
 CONECT   18   16   17   27
 CONECT   19   13
 CONECT   20   14

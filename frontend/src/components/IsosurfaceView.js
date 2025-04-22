@@ -119,9 +119,13 @@ const IsosurfaceView = ({ folderPath }) => {
 
                         console.log("GLTF Scene:", gltf.scene);
                         const objectName = folderPath.split("/")[1]; 
-
-                        const mainObject = gltf.scene.children.find(child => 
+                        console.log("Object Name:", objectName);
+                        console.log("GLTF Children:", gltf.scene.children);
+                        console.log(gltf.scene.children.find(child => 
                             child.name.includes(objectName)
+                        ))
+                        const mainObject = gltf.scene.children.find(child => 
+                            child.name.includes("")
                         );
 
                         if (!mainObject) {
