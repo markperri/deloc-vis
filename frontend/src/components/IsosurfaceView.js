@@ -11,8 +11,8 @@ const materialCache = {};
 
 const materialPresets = {
     all: {
-        grp1: new THREE.MeshStandardMaterial({ color: 0xD4D4D4, metalness: 0.1, roughness: 0.5 }), // Carbon
-        default: new THREE.MeshStandardMaterial({ color: 0xD4D4D4, metalness: 0.1, roughness: 0.5 }) // Default
+        grp1: new THREE.MeshStandardMaterial({ color: 0x54fdfd, metalness: 0.1, roughness: 0.5 }), // Carbon
+        default: new THREE.MeshStandardMaterial({ color: 0x54fdfd, metalness: 0.1, roughness: 0.5 }) // Default
     },
     pndit: {
         grp7241: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.5 }), // H
@@ -97,7 +97,7 @@ const IsosurfaceView = ({ folderPath }) => {
                         geometry.computeVertexNormals();
                         const mesh = new THREE.Mesh(
                             geometry,
-                            new THREE.MeshStandardMaterial({ color:'rgb(255, 255, 4)', 
+                            new THREE.MeshStandardMaterial({ color:'#426ec4', 
                                 roughness: 1,         
                                 metalness: 0.0,         
                                 side: THREE.DoubleSide,     
