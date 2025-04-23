@@ -7,22 +7,23 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { fetchModelFiles } from "../utils/api";
 
 
+
 const materialCache = {};
 
 const materialPresets = {
     all: {
-        grp1: new THREE.MeshStandardMaterial({ color: 0x54fdfd, metalness: 0.1, roughness: 0.5 }), // Carbon
-        default: new THREE.MeshStandardMaterial({ color: 0x54fdfd, metalness: 0.1, roughness: 0.5 }) // Default
+        grp1: new THREE.MeshStandardMaterial({ color: 0x54fdfd, metalness: 0.1, roughness: 0.1 }), // Carbon
+        default: new THREE.MeshStandardMaterial({ color: 0x54fdfd, metalness: 0.1, roughness: 0.1 }) // Default
     },
     pndit: {
-        grp7241: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.5 }), // H
-        grp12039: new THREE.MeshStandardMaterial({ color: 0xFF0000, metalness: 0.1, roughness: 0.5 }), // O
-        grp13757: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.5 }), // S
-        grp11585: new THREE.MeshStandardMaterial({ color: 0x00008B, metalness: 0.1, roughness: 0.5 })  // N
+        grp7241: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.1 }), // H
+        grp12039: new THREE.MeshStandardMaterial({ color: 0xFF0000, metalness: 0.1, roughness: 0.1 }), // O
+        grp13757: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.1 }), // S
+        grp11585: new THREE.MeshStandardMaterial({ color: 0x00008B, metalness: 0.1, roughness: 0.1 })  // N
     },
     p3ht: {
-        grp7241: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.5 }), // S
-        grp3621: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.5 })  // H
+        grp7241: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.1 }), // S
+        grp3621: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.1 })  // H
     },
     fout: {
         grp7241: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.5 }), // S
@@ -31,10 +32,10 @@ const materialPresets = {
         grp14843: new THREE.MeshStandardMaterial({ color: 0xFFB6C1, metalness: 0.1, roughness: 0.5 })  // ??
     },
     fin: {
-        grp7241: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.5 }), // S
-        grp8689: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.5 }), // H
-        grp13395: new THREE.MeshStandardMaterial({ color: 0xFF0000, metalness: 0.1, roughness: 0.5 }), // O
-        grp14843: new THREE.MeshStandardMaterial({ color: 0xFFB6C1, metalness: 0.1, roughness: 0.5 })  // ??
+        grp7241: new THREE.MeshStandardMaterial({ color: 0xFFFF00, metalness: 0.1, roughness: 0.1 }), // S
+        grp8689: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.1 }), // H
+        grp13395: new THREE.MeshStandardMaterial({ color: 0xFF0000, metalness: 0.1, roughness: 0.1 }), // O
+        grp14843: new THREE.MeshStandardMaterial({ color: 0xFFB6C1, metalness: 0.1, roughness: 0.1})  // ??
     }
 };
 
@@ -86,19 +87,14 @@ const IsosurfaceView = ({ folderPath }) => {
                 const stlLoader = new STLLoader();
                 const gltfLoader = new GLTFLoader();
 
-                const prevPosition = cameraRef.current ? cameraRef.current.position.clone() : null;
-                const prevTarget = controlsRef.current ? controlsRef.current.target.clone() : null;
-
-                
-
                 if (files["Isoober.stl"]) {
                     stlLoader.load(files["Isoober.stl"], (geometry) => {
                         
                         geometry.computeVertexNormals();
                         const mesh = new THREE.Mesh(
                             geometry,
-                            new THREE.MeshStandardMaterial({ color:'#426ec4', 
-                                roughness: 1,         
+                            new THREE.MeshPhongMaterial({ color:'#4d83f0', 
+                                roughness: 0.2,
                                 metalness: 0.0,         
                                 side: THREE.DoubleSide,     
                             })
@@ -145,6 +141,16 @@ const IsosurfaceView = ({ folderPath }) => {
                               console.log(`Assigning material to mesh: ${mesh.name}, color: ${material.color.getHexString()}`);
                           
                               mesh.material = material;
+                              mesh.castShadow = true;
+                              mesh.receiveShadow = true;
+                              const outlineMaterial = new THREE.MeshBasicMaterial({
+                                color: 0x222222,
+                                side: THREE.BackSide
+                              });
+                              
+                              const outlineMesh = new THREE.Mesh(mesh.geometry, outlineMaterial);
+                              outlineMesh.scale.set(1.005, 1.005, 1.005); 
+                              mesh.add(outlineMesh);
                             }
                           });
 
@@ -161,20 +167,47 @@ const IsosurfaceView = ({ folderPath }) => {
 
         loadModels();
     }, [folderPath]);
-
+    
     return (
-        <Canvas style={{ width: "100%", height: "100%" }} shadows>
-            <ambientLight intensity={2} />
-            <directionalLight position={[1, 1, 1]} intensity={1} />
+        <Canvas style={{ width: "100%", height: "100%" }} shadows onCreated={({ gl }) => {
+            gl.toneMapping = THREE.NoToneMapping;
+            gl.outputColorSpace = THREE.SRGBColorSpace;
+          }}
+          >
+            <ambientLight intensity={3.4} />
 
+
+            <directionalLight
+                position={[2, 5, 3]}
+                intensity={10}
+                castShadow
+                shadow-mapSize-width={2048}
+                shadow-mapSize-height={2048}
+                shadow-camera-near={0.5}
+                shadow-camera-far={20}
+                shadow-camera-left={-10}
+                shadow-camera-right={10}
+                shadow-camera-top={10}
+                shadow-camera-bottom={-10}
+            />
+            
+            <directionalLight
+                position={[-2, -3, -3]}
+                intensity={10}
+                color="#aaaaaa"
+            />
             <group ref={groupRef}>
-                {stlMesh && <primitive object={stlMesh} />}
-                {glbScene && <primitive object={glbScene} />}
-                {meshMesh && <primitive object={meshMesh} />}
+                {stlMesh && <primitive object={stlMesh} castShadow
+  receiveShadow />}
+                {glbScene && <primitive object={glbScene} castShadow
+  receiveShadow contour/>}
+                {meshMesh && <primitive object={meshMesh} castShadow
+  receiveShadow/>}
             </group>
 
             <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 0, 6]} />
             <CameraControl controlRef={controlsRef} />
+            
         </Canvas>
     );
 };
