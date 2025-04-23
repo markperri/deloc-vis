@@ -22,7 +22,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 650px;
+  max-width: 40vw;
   height: fit-content;
   position: relative;
   z-index: 1;
@@ -83,6 +83,7 @@
   width: 100%;
   position: relative;
   z-index: 1;
+  max-width: 60vw;
 }
 
 .viewerHeader {
