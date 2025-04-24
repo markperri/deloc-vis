@@ -1,7 +1,7 @@
 /* Main container */
 .container {
   display: grid;
-  grid-template-columns: minmax(450px, 650px) minmax(650px, 1fr);
+  grid-template-columns: minmax(40vw, 1fr) minmax(55vw, 1fr);
   gap: 2rem;
   padding: 2rem;
   max-width: 100%;
