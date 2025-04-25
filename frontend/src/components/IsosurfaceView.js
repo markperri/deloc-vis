@@ -73,9 +73,15 @@ const IsosurfaceView = ({ folderPath }) => {
     const [stlMesh, setStlMesh] = useState(null);
     const [meshMesh, setMeshMesh] = useState(null);
     const [glbScene, setGlbScene] = useState(null);
+    const [bgColor, setBgColor] = useState("#ffffff"); 
+
     const groupRef = useRef();
     const cameraRef = useRef();
     const controlsRef = useRef();
+
+    const toggleBackgroundColor = () => {
+        setBgColor((prev) => (prev === "#000000" ? "#ffffff" : "#000000"));
+    };
 
     useEffect(() => {
         const loadModels = async () => {
@@ -169,12 +175,32 @@ const IsosurfaceView = ({ folderPath }) => {
     }, [folderPath]);
     
     return (
+        <div style={{ width: "100%", height: "100%" }}>
+            <button 
+                onClick={toggleBackgroundColor} 
+                style={{ 
+                    position: "absolute", 
+                    zIndex: 10, 
+                    top: 10, 
+                    left: 10, 
+                    padding: "8px 12px", 
+                    background: "#222", 
+                    color: "#fff", 
+                    border: "none", 
+                    borderRadius: 4,
+                    cursor: "pointer"
+                }}
+            >
+                Change Background Color
+            </button>
+        
         <Canvas style={{ width: "100%", height: "100%" }} shadows onCreated={({ gl }) => {
             gl.toneMapping = THREE.NoToneMapping;
             gl.outputColorSpace = THREE.SRGBColorSpace;
           }}
           >
-            <ambientLight intensity={3.4} />
+            
+            <ambientLight intensity={3} />
 
 
             <directionalLight
@@ -204,11 +230,13 @@ const IsosurfaceView = ({ folderPath }) => {
                 {meshMesh && <primitive object={meshMesh} castShadow
   receiveShadow/>}
             </group>
+            <color attach="background" args={[bgColor]} />
 
             <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 0, 6]} />
             <CameraControl controlRef={controlsRef} />
             
         </Canvas>
+        </div>
     );
 };
 
