@@ -12,8 +12,8 @@ const materialCache = {};
 
 const materialPresets = {
     all: {
-        grp1: new THREE.MeshStandardMaterial({ color: 0x54fdfd, metalness: 0.1, roughness: 0.1 }), // Carbon
-        default: new THREE.MeshStandardMaterial({ color: 0x54fdfd, metalness: 0.1, roughness: 0.1 }) // Default
+        grp1: new THREE.MeshStandardMaterial({ color: 0x696880, metalness: 0.1, roughness: 0.1 }), // Carbon
+        default: new THREE.MeshStandardMaterial({ color: 0x696880, metalness: 0.1, roughness: 0.1 }) // Default
     },
     pndit: {
         grp7241: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.1, roughness: 0.1 }), // H
@@ -46,7 +46,7 @@ const getAtomMaterial = (groupName, moleculeName) => {
         const material = preset[groupName] || preset.default;
 
         if (!preset[groupName]) {
-            console.warn(`⚠️ Unknown group: ${groupName} for molecule: ${moleculeName}`);
+            console.warn(`Unknown group: ${groupName} for molecule: ${moleculeName}`);
         }
 
         materialCache[groupName] = material;
@@ -74,6 +74,7 @@ const IsosurfaceView = ({ folderPath }) => {
     const [meshMesh, setMeshMesh] = useState(null);
     const [glbScene, setGlbScene] = useState(null);
     const [bgColor, setBgColor] = useState("#ffffff"); 
+    const [buttonColor, setButtonColor] = useState("#000000"); 
 
     const groupRef = useRef();
     const cameraRef = useRef();
@@ -81,6 +82,7 @@ const IsosurfaceView = ({ folderPath }) => {
 
     const toggleBackgroundColor = () => {
         setBgColor((prev) => (prev === "#000000" ? "#ffffff" : "#000000"));
+        setButtonColor((prev) => (prev === "#ffffff" ? "#000000" : "#ffffff"));
     };
 
     useEffect(() => {
@@ -184,9 +186,9 @@ const IsosurfaceView = ({ folderPath }) => {
                     top: 10, 
                     left: 10, 
                     padding: "8px 12px", 
-                    background: "#222", 
-                    color: "#fff", 
-                    border: "none", 
+                    background: buttonColor, 
+                    color: bgColor, 
+                    border: "solid 1px #ccc", 
                     borderRadius: 4,
                     cursor: "pointer"
                 }}
