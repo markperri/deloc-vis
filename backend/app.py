@@ -79,7 +79,6 @@ def p3ht_folder(folder_path):
     if glb_files:
         glb_file_path = os.path.join(base_path, glb_files[0])
         renamed_glb_path = os.path.join(base_path, "color.glb")
-        os.rename(glb_file_path, renamed_glb_path)
         file_data["color.glb"] = encode_file_to_base64(renamed_glb_path)
 
     if not file_data:
