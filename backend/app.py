@@ -11,14 +11,26 @@ load_dotenv()
 app = Flask(__name__)
 
 # Configure CORS - Allow specific origins
-CORS(app, resources={r"*": {"origins": [
-    "https://chemcompute.org",
-    "https://beta.chemcompute.org",
+
+# Default origins from original project
+default_origins = [
     "https://lrg-computational.github.io",
-    "http://localhost:3000",  # Allow local development
-    "https://*.netlify.app",  # Allow Netlify default domains
-    "https://deloc-vis.netlify.app"  # Allow specific Netlify domain
-]}})
+    "http://localhost:3000",
+    "https://*.netlify.app",
+    "https://deloc-vis.netlify.app"
+]
+
+# Allow deployment to override allowed origins
+# ALLOWED_ORIGINS can be a comma separated list
+
+env_origins = os.getenv("ALLOWED_ORIGINS")
+if env_origins:
+    origins = [origin.strip() for origin in env_origins.split(",")]
+else:
+    origins = default_origins
+
+# Configure CORS
+CORS(app, resources={r"*": {"origins": origins}})
 
 def encode_file_to_base64(file_path):
     """Reads a file and returns its base64-encoded content."""
@@ -90,4 +102,6 @@ def p3ht_folder(folder_path):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    use_devserver = os.getenv("FLASK_USE_DEVSERVER", "true").lower() == "true"
+    if use_devserver:
+        app.run(debug=True)
