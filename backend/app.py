@@ -12,6 +12,8 @@ app = Flask(__name__)
 
 # Configure CORS - Allow specific origins
 CORS(app, resources={r"*": {"origins": [
+    "https://chemcompute.org",
+    "https://beta.chemcompute.org",
     "https://lrg-computational.github.io",
     "http://localhost:3000",  # Allow local development
     "https://*.netlify.app",  # Allow Netlify default domains
